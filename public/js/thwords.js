@@ -102,7 +102,7 @@ $(document).ready(function(){
 
         // settings
         var version = "1.0.0",
-            copyright = 2105;
+            copyright = 2015;
 
         // games
         var games = [
