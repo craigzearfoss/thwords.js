@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html class=" js no-touch cssanimations csstransforms csstransforms3d csstransitions cssfilters preserve3d">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Thwords - The Original Synonym Game</title>
+    <meta http-equiv="description" content="Thwords is a free online word game.  You are given a definition and must complete a list synonyms by selecting letters. Have fun as you increase your vocabulary. Challenge yourself and your friends to see how high you can score.">
+    <meta http-equiv="keywords" content="online word games, free online word games, word games online, single player word games, educational games, trivia games, language games, vocabulary, antonyms, spelling, trivia, scrabble, scramble">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="stylesheet" type="text/css" href="css/thwords.css">
+
+<body lang="en">
+
+<div id="overlay-background" class="hide"></div>
+
+<div id="overlay-ad" class="hide"></div>
+
+<div id="container">
+
+    <div id="container-initializing" class="hide">
+        <h2>Initializing</h2>
+        <img src="/img/loading7.gif">
+    </div>
+
+    <div id="container-content" class="show">
+
+        <div id="overlay-div-container" class="hide">
+
+            <div id="overlay-div-content-top">
+            </div>
+
+            <div id="overlay-div-nav">
+                <button id="overlay-continue-btn" class="btn thw-btn overlay-continue-btn" data-idx="" data-value=""></button>
+            </div>
+
+            <div id="overlay-div-content">
+            </div>
+
+        </div>
+
+        <div id="overlay-btn-container" class="hide">
+            <button id="overlay-btn" class="overlay-btn" data-idx="" data-value=""></button>
+        </div>
+
+        <header>
+            <div id="hamburger" class="in-game-only show">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <h2 id="head-title"><span id="header-game-name" class="game-name">Thwords</span><span id="header-game-shortName" class="game-shortName">Thwords</span><sub>®</sub></h2>
+        </header>
+
+        <nav style="opacity: 0; display: none;">
+            <ul>
+                <li><a id="show-debug-data" class="show-debug-data-overlay hide" href="">Debug Data</a></li>
+                <li class="in-game-only show"><a class="show-game-stats-overlay" href="">Game Statistics</a></li>
+                <li class="in-game-only show"><a class="show-round-stats-overlay" href="">Round Statistics</a></li>
+                <li class="in-game-only show"><a class="show-high-scores-overlay" href="">High Scores</a></li>
+                <li class="in-game-only show"><a class="show-settings-overlay" href="" style="display: inline-block; width: 100%;">Settings</a></li>
+                <li class="in-game-only show"><a class="save-and-exit-game" href="http://app.thwords.com/play">Save and Exit Game</a></li>
+                <li class="in-game-only show"><a class="quit-game" href="http://app.thwords.com/play">Quit Game</a></li>
+                <li class="in-game-only show"><a class="show-tile-values-overlay" href="">Tile Values</a></li>
+                <li class="in-game-only show"><a class="show-help-overlay" href="">Help</a></li>
+                <li class="in-game-only show"><a class="show-about-overlay" href="">About</a></li>
+                <li class="in-game-only show"><a class="visit-thwords-com" href="">Visit <span class="hilite">Thwords.com</span></a></li>
+                <li class="in-game-only show"><a class="show-general-feedback-overlay" href="">Feedback</a></li>
+            </ul>
+        </nav>
+
+        <div id="menuContentLayer" style="display: none;"></div>
+
+            <section id="game-panels">
+
+                <article id="game-panel-launch" class="game-panel launch-panel show">
+
+                    <h2 class="hilite">Thwords</h2>
+
+                    <div class="game-instr">
+                        <hr>
+                        <p>
+                            This is the original game of synonyms. All of the <span class="hilite2">Thwords</span> you are trying to solve will be synonyms of the topic. That's all you need to know.
+                        </p>
+                    </div>
+
+                    <div id="start-game-settings" class="info-div">
+                        <p class="label">Enter Your Name</p>
+                        <p class="subscript">We only use your name to credit you if make our high scorers list.</p>
+                        <input name="start-user-name" id="start-user-name" class="settings-input" value="Craig Z" type="text">
+
+                        <div id="start-settings-skillLevel">
+                            <p class="label">Skill Level</p><p>
+                            <select id="start-skill-level" name="start-skill-level" class="settings-input">
+                                Skill Level
+                                <option value="1">Novice</option>
+                                <option value="2">Amateur</option>
+                                <option selected="selected" value="3">Pro</option>
+                                <option value="4">Expert</option>
+                            </select>
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <button class="start-game btn thw-btn show" data-id="1" data-name="Thwords" data-lang="en">Start<br>Thwords</button>
+
+                    <div class="game-instr footnote">
+                    </div>
+
+                </article>
+
+                <article id="game-panel-score" class="game-panel hide">
+                    <span id="round-and-points">
+                        Plays: <span class="play-count">0</span> / Points: <span class="game-point-count">0</span>
+                    </span>
+                    <span id="moves-left"><span class="strike-xs"></span><span class="play-move-remaining score">0</span> <span class="round-moves-left-text">moves left</span></span>
+                </article>
+
+                <article id="game-panel-start" class="game-panel hide">
+                    <button id="btn-play-topic-again" class="play-topic-again btn thw-btn hide">PLAY TOPIC AGAIN</button>
+                    <a id="btn-next-round" class="next-round next-round-link btn thw-btn hide" href="http://app.thwords.com/next/thwords?85941738">NEXT ROUND</a>
+                    <a id="btn-new-game" class="new-game btn thw-btn hide" href="http://app.thwords.com/play/">NEW GAME</a>
+                    <button id="btn-show-bonus" class="show-bonus btn thw-btn hide">BONUS QUESTIONS</button>
+                </article>
+
+                <article id="game-panel-topic" class="game-panel play-topic-name game-topic hide">null</article>
+
+                <article id="game-panel-choose" class="game-panel hide">
+                </article>
+
+                <article id="game-panel-answers" class="game-panel hide">
+                </article>
+
+                <article id="game-panel-bonus" class="game-panel hide">
+                </article>
+
+                <article id="game-panel-chars" class="game-panel hide">
+                </article>
+
+                <article id="game-panel-feedback" class="game-panel hide">
+                    <h4>Let us know what you thought of this topic.</h4>
+                    <a id="btn-topic-like" class="btn-feedback" href=""><i class="icon-thumbs-up"></i> Like</a>
+                    <a id="btn-topic-dislike" class="btn-feedback" href=""><i class="icon-thumbs-down"></i> Dislike</a>
+                    <a id="btn-topic-too-easy" class="btn-feedback" href=""><i class="icon-plus"></i>Too Easy</a>
+                    <a id="btn-topic-too-hard" class="btn-feedback" href=""><i class="icon-minus"></i>Too Hard</a>
+                    <br>
+                    <a id="btn-topic-comment" class="btn-feedback" href=""><i class="icon-comment"></i>Comment</a>
+                    <a id="btn-topic-problem" class="btn-feedback" href=""><i class="icon-warning-sign"></i>Report Problem</a>
+                </article>
+
+                <div id="overlay-topic-feedback-container" class="hide">
+                    <div id="topic-feedback-popup">
+                        <h4 id="topic-feedback-instr-problem" class="feedback-instr show">Enter a brief description.</h4>
+                        <h4 id="topic-feedback-instr-comment" class="feedback-instr hide">Enter your comment.</h4>
+                        <textarea id="topic-feedback-text" name="topic-feedback-text" maxlength="100"></textarea>
+                        <a id="btn-topic-feedback-cancel" class="btn-feedback feedback-submit" href="">Cancel</a>
+                        <a id="btn-topic-feedback-submit-comment" class="btn-feedback feedback-submit feedback-submit-right show" href="">Submit</a>
+                        <a id="btn-topic-feedback-submit-problem" class="btn-feedback feedback-submit feedback-submit-right hide" href="">Submit</a>
+                        <p class="feedback-footnote">If you have a long comment or problem, please use the <b>Feedback</b> option in the menu.</p>
+                    </div>
+                </div>
+
+            </section>
+
+<script>
+
+    var woggle = {"settings":{"ads":"1","apiDomains":["api1.thwords.com","api2.thwords.com","api3.thwords.com"],"statsDomain":"stats.thwords.com"},"game":{"id":1,"name":"Thwords","shortName":"Thwords","slug":"thwords","category_choose":0,"subject_choose":0,"topic_choose":0,"lesson_choose":0}};
+
+</script>
+
+        </div>
+
+        <div id="container-share" class="show">
+            <table id="share-links-tbl">
+                <tbody>
+                    <tr>
+                        <td>
+                            <button id="btn-embed-link" class="share-btn"><img src="/img/icon_embed.png"><span class="btn-txt">Embed</span></button>
+                        </td>
+                        <td>
+                            <button id="btn-link-link" class="share-btn"><img src="/img/icon_linkexternal.png"><span class="btn-txt">Link</span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="container-embed-link">
+                <div><a id="close-embed-link" href="">X</a></div>
+                <input id="embed-link" name="embed-link" value="&lt;iframe height=&quot;440&quot; width=&quot;420&quot; src=&quot;http://app.thwords.com/play/thwords?e=1&amp;al=uk&amp;sl=3&amp;kl=2&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;" type="text">
+            </div>
+            <div id="container-link-link">
+                <div><a id="close-link-link" href="">X</a></div>
+                <input id="link-link" name="link-link" value="http://app.thwords.com/play/thwords?s=1&amp;al=uk&amp;sl=3&amp;kl=2" type="text">
+            </div>
+        </div>
+
+        <div id="container-footer">
+            <footer id="colophon" class="wrapper">
+                <p>©2015 all rights reserved <a href="http://thwords.com/" target="_blank" class="hilite" style="text-decoration: none;">Thwords.com</a>.</p>
+            </footer>
+        </div>
+
+    </div>
+
+    <div id="debug-data" style="display: none;">
+
+        <div>
+            <article id="game-stats-panel" class="stats-panel">
+                <h3 style="text-align: center;">Debug Data</h3>
+                <div class="info-div" style="display: block; margin: 0 auto;">
+
+                    <table id="debug-settings-table" class="stats-table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">settings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Domain</td>
+                                <td><span class="settings-domain">app.thwords.com</span></td>
+                            </tr>
+                            <tr>
+                                <td>API Domain</td>
+                                <td><span class="settings-apiDomain">api1.thwords.com</span></td>
+                            </tr>
+                            <tr>
+                                <td>API Domains</td>
+                                <td><span class="settings-apiDomains">api1.thwords.com,api2.thwords.com,api3.thwords.com</span></td>
+                            </tr>
+                            <tr>
+                                <td>Show Ads</td>
+                                <td><span class="settings-showAds">1</span></td>
+                            </tr>
+                            <tr>
+                                <td>Overlay Button Delay</td>
+                                <td><span class="settings-overlayButtonDelay">500</span></td>
+                            </tr>
+                            <tr>
+                                <td>Overlay Div Delay</td>
+                                <td><span class="settings-overlayDivDelay">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>Tile Flip Delay</td>
+                                <td><span class="settings-tileFlipDelay">300</span></td>
+                            </tr><tr>
+                                <td>Session ID</td>
+                                <td><span class="settings-sessionId">c2251f9a-eea1-447a-a1de-c6d88585beb8</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table id="debug-user-table" class="stats-table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">user</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ID</td>
+                                <td><span class="user-id">null</span></td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td><span class="user-name">Craig Z</span></td>
+                            </tr>
+                            <tr>
+                                <td>Username</td>
+                                <td><span class="user-username">null</span></td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td><span class="user-email">null</span></td>
+                            </tr>
+                            <tr>
+                                <td>Language</td>
+                                <td><span class="user-language"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Languages</td>
+                                <td><span class="user-languages"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Session ID</td>
+                                <td><span class="user-sessionId">c2251f9a-eea1-447a-a1de-c6d88585beb8</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table id="debug-play-table" class="stats-table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">play</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Game<br>Slug<br>Description<br>Details</td>
+                                <td>
+                                    <span class="play-id">1</span>: <span class="play-name">Thwords</span>
+                                    <br><span class="play-slug">thwords</span>
+                                    <br><span class="play-description">null</span>
+                                    <br><span class="play-details">null</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Status / Count / Random</td>
+                                <td><span class="play-status">-1</span> / <span class="play-count">0</span> / <span class="play-random">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>Language / Languages</td>
+                                <td><span class="play-language"></span> / <span class="play-languages"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Category<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="play-category-id">0</span>: <span class="play-category-name">null</span>
+                                    <br><span class="play-category-choose">0</span> / <span class="play-category-max">1</span> / <span class="play-category-count">0</span> (<span class="play-category-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Subject<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="play-subject-id">0</span>: <span class="play-subject-name">null</span>
+                                    <br><span class="play-subject-choose">0</span> / <span class="play-subject-max">1</span> / <span class="play-subject-count">0</span> (<span class="play-subject-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Topic<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="play-topic-id">0</span>: <span class="play-topic-name">null</span>
+                                    <br><span class="play-topic-choose">0</span> / <span class="play-topic-max">1</span> / <span class="play-topic-count">0</span> (<span class="play-topic-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lesson<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="play-lesson-id">0</span>: <span class="play-lesson-name">null</span>
+                                    <br><span class="play-lesson-choose">0</span> / <span class="play-lesson-max">1</span> / <span class="play-lesson-count">0</span> (<span class="play-lesson-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Thwords (count / total)</td>
+                                <td class="align-center"><span class="play-thword-count">0</span> / <span class="play-thword-total">0</span> (<span class="play-thword-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>char played</td>
+                                <td class="align-center"><span class="play-char-played"></span></td>
+                            </tr>
+                            <tr>
+                                <td>tile flipped</td>
+                                <td class="align-center"><span class="play-tile-flipped"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Move: count / total (%)<br>max / strikes / remaining</td>
+                                <td class="align-center">
+                                    <span class="play-move-count">0</span> / <span class="play-move-total">0</span> (<span class="play-move-percent">null</span>%)
+                                    <br><span class="play-move-max">0</span> / <span class="play-move-strikes">0</span> / <span class="play-move-remaining">0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Point: count / total (%)</td>
+                                <td class="align-center"><span class="play-point-count">0</span> / <span class="play-point-total">0</span> (<span class="play-point-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Hit Streak: (current / long)</td>
+                                <td class="align-center"><span class="play-hitStreak-current">0</span> /  <span class="play-hitStreak-long">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>Bonus: (on) count / total (%)</td>
+                                <td class="align-center">(<span class="play-bonus-on">0</span>) <span class="play-bonus-count">0</span> / <span class="play-bonus-total">0</span> (<span class="play-bonus-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Save: (status) count / total (%)</td>
+                                <td class="align-center">(<span class="play-save-status">-1</span>) <span class="play-save-count">0</span> / <span class="play-save-total">0</span> (<span class="play-save-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Session ID</td>
+                                <td><span class="play-sessionId">b407ca20-78dd-48df-9af5-e8a516e69731</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table id="debug-round-table" class="stats-table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Round</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Game<br>Slug<br>Description<br>Details</td>
+                                <td>
+                                    <span class="round-id">1</span>: <span class="round-name">Thwords</span>
+                                    <br><span class="round-slug">thwords</span>
+                                    <br><span class="round-description">null</span>
+                                    <br><span class="round-details">null</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Status / Count / Random</td>
+                                <td><span class="round-status">-1</span> / <span class="round-count">0</span> / <span class="round-random">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>Language / Languages</td>
+                                <td><span class="round-language"></span> / <span class="round-languages"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Category<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="round-category-id">0</span>: <span class="round-category-name">null</span>
+                                    <br><span class="round-category-choose">0</span> / <span class="round-category-max">1</span> / <span class="round-category-count">0</span> (<span class="round-category-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Subject<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="round-subject-id">0</span>: <span class="round-subject-name">null</span>
+                                    <br><span class="round-subject-choose">0</span> / <span class="round-subject-max">1</span> / <span class="round-subject-count">0</span> (<span class="round-subject-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Topic<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="round-topic-id">0</span>: <span class="round-topic-name">null</span>
+                                    <br><span class="round-topic-choose">0</span> / <span class="round-topic-max">1</span> / <span class="round-topic-count">0</span> (<span class="play-topic-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lesson<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="round-lesson-id">0</span>: <span class="round-lesson-name">null</span>
+                                    <br><span class="round-lesson-choose">0</span> / <span class="round-lesson-max">1</span> / <span class="round-lesson-count">0</span> (<span class="round-lesson-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Thwords (count / total)</td>
+                                <td class="align-center"><span class="round-thword-count">0</span> / <span class="round-thword-total">0</span> (<span class="round-thword-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>char played</td>
+                                <td class="align-center"><span class="round-char-played"></span></td>
+                            </tr>
+                            <tr>
+                                <td>tile flipped</td>
+                                <td class="align-center"><span class="round-tile-flipped"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Move: count / total (%)<br>max / strikes / remaining</td>
+                                <td class="align-center">
+                                    <span class="round-move-count">0</span> / <span class="round-move-total">0</span> (<span class="round-move-percent">null</span>%)
+                                    <br><span class="round-move-max">0</span> / <span class="round-move-strikes">0</span> / <span class="round-move-remaining">0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Point: count / total (%)</td>
+                                <td class="align-center"><span class="round-point-count">0</span> / <span class="round-point-total">0</span> (<span class="round-point-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Hit Streak: (current / long)</td>
+                                <td class="align-center"><span class="round-hitStreak-current">0</span> / <span class="play-hitStreak-long">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>Bonus: (on) count / total (%)</td>
+                                <td class="align-center">(<span class="round-bonus-on">0</span>) <span class="round-bonus-count">0</span> / <span class="round-bonus-total">0</span> (<span class="round-bonus-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Save: (status) count / total (%)</td>
+                                <td class="align-center">(<span class="round-save-status">-1</span>) <span class="round-save-count">0</span> / <span class="round-save-total">0</span> (<span class="round-save-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Session ID</td>
+                                <td><span class="round-sessionId">b407ca20-78dd-48df-9af5-e8a516e69731</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table id="debug-game-table" class="stats-table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Game</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Game<br>Slug<br>Description<br>Details</td>
+                                <td>
+                                    <span class="game-id">1</span>: <span class="game-name">Thwords</span>
+                                    <br><span class="game-slug">thwords</span>
+                                    <br><span class="game-description">null</span>
+                                    <br><span class="game-details">null</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Status / Count / Random</td>
+                                <td><span class="game-status">-1</span> / <span class="game-count">0</span> / <span class="game-random">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>Language / Languages</td>
+                                <td><span class="game-language"></span> / <span class="game-languages"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Category<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="game-category-id">0</span>: <span class="game-category-name">null</span>
+                                    <br><span class="game-category-choose">0</span> / <span class="game-category-max">1</span> / <span class="game-category-count">0</span> (<span class="game-category-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Subject<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="game-subject-id">0</span>: <span class="game-subject-name">null</span>
+                                    <br><span class="game-subject-choose">0</span> / <span class="game-subject-max">1</span> / <span class="game-subject-count">0</span> (<span class="game-subject-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Topic<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="game-topic-id">0</span>: <span class="game-topic-name">null</span>
+                                    <br><span class="game-topic-choose">0</span> / <span class="game-topic-max">1</span> / <span class="game-topic-count">0</span> (<span class="play-topic-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lesson<br>choose / max / count (played)</td>
+                                <td>
+                                    <span class="game-lesson-id">0</span>: <span class="game-lesson-name">null</span>
+                                    <br><span class="game-lesson-choose">0</span> / <span class="game-lesson-max">1</span> / <span class="game-lesson-count">0</span> (<span class="game-lesson-played"></span>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Thwords (count / total)</td>
+                                <td class="align-center"><span class="game-thword-count">0</span> / <span class="game-thword-total">0</span> (<span class="game-thword-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>char played</td>
+                                <td class="align-center"><span class="game-char-played"></span></td>
+                            </tr>
+                            <tr>
+                                <td>tile flipped</td>
+                                <td class="align-center"><span class="game-tile-flipped"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Move: count / total (%)<br>max / strikes / remaining</td>
+                                <td class="align-center">
+                                    <span class="game-move-count">0</span> / <span class="game-move-total">0</span> (<span class="game-move-percent">null</span>%)
+                                    <br><span class="game-move-max">0</span> / <span class="game-move-strikes">0</span> / <span class="game-move-remaining">0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Point: count / total (%)</td>
+                                <td class="align-center"><span class="game-point-count">0</span> / <span class="game-point-total">0</span> (<span class="game-point-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Hit Streak: (current / long)</td>
+                                <td class="align-center"><span class="game-hitStreak-current">0</span> / <span class="play-hitStreak-long">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>Bonus: (on) count / total (%)</td>
+                                <td class="align-center">(<span class="game-bonus-on">0</span>) <span class="game-bonus-count">0</span> / <span class="game-bonus-total">0</span> (<span class="game-bonus-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Save: (status) count / total (%)</td>
+                                <td class="align-center">(<span class="game-save-status">-1</span>) <span class="game-save-count">0</span> / <span class="game-save-total">0</span> (<span class="game-save-percent">null</span>%)</td>
+                            </tr>
+                            <tr>
+                                <td>Session ID</td>
+                                <td><span class="game-sessionId">b407ca20-78dd-48df-9af5-e8a516e69731</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </article>
+
+            <article id="game-panel-debug" class="game-panel hide">
+            </article>
+
+        </div>
+    </div>
+
+
+<script src="/js/mustache.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery-1.11.3.min.js"></script>
+<script src="/js/jquery.cookie.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<script src="/js/thwords.js"></script>
+
+<script type="text/x-tmpl-mustache" id="about-template">
+    <article id="about-panel" class="about-panel">
+        <h3>Thwords</h3>
+        <div class="info-div">
+            Version: {{version}}
+            <br>Copyright {{copyright}}
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="answers-template">
+    {{#answers}}
+    <div id="answer-{{idx}}" data-idx="{{idx}}" class="answer">
+        <div class="ans hide" data-idx="{{idx}}">{{answer}}</div>
+        <div class="aux1 hide" data-idx="{{idx}}">{{aux1}}</div>
+        <div class="aux2 hide" data-idx="{{idx}}">{{aux2}}</div>
+        {{{tileRack}}}
+    </div>
+    {{/answers}}
+</script>
+
+<script type="text/x-tmpl-mustache" id="question-fill-in-the-blank-template">
+    <h2 id="question-title">{{title}}</h2>
+    <button id="btn-next-question" class="next-question btn thw-btn hide">NEXT QUESTION</button>
+    <p id="question-instructions">{{instructions}}</p>
+    <div class="question-container-outer">
+        <div class="question-container-inner">
+            <p>{{question}}</p>
+            <hr>
+
+        </div>
+    </div>
+</script>
+
+<script type="text/x-tmpl-mustache" id="question-multi-select-template">
+    <h2 id="question-title">{{title}}</h2>
+    <button id="btn-next-question" class="next-question btn thw-btn hide">NEXT QUESTION</button>
+    <p id="question-instructions">{{instructions}}</p>
+    <div class="question-container-outer">
+        <div class="question-container-inner">
+            <p>{{question}}</p>
+            <hr>
+
+        </div>
+    </div>
+</script>
+
+<script type="text/x-tmpl-mustache" id="question-multiple-choice-template">
+    <h2 id="question-title">{{title}}</h2>
+    <button id="btn-next-question" class="next-question btn thw-btn hide">NEXT QUESTION</button>
+    <p id="question-instructions">{{instructions}}</p>
+    <div class="question-container-outer">
+        <div class="question-container-inner">
+            <p>{{question}}</p>
+            <hr>
+            {{#options}}
+            <div class="question-answers">
+            <button id="question-answer-{{idx}}-{{option}}" class="question-answer btn ans-btn" data-idx="{{idx}}" data-option="{{option}}">{{text}}</button>
+            </div>
+            {{/options}}
+        </div>
+    </div>
+</script>
+
+<script type="text/x-tmpl-mustache" id="question-sequence-template">
+    <h2 id="question-title">{{title}}</h2>
+    <button id="btn-next-question" class="next-question btn thw-btn hide">NEXT QUESTION</button>
+    <p id="question-instructions">{{instructions}}</p>
+    <div class="question-container-outer">
+        <div class="question-container-inner">
+            <p>{{question}}</p>
+            <hr>
+
+        </div>
+    </div>
+</script>
+
+<script type="text/x-tmpl-mustache" id="question-text-template">
+    <h2 id="question-title">{{title}}</h2>
+    <button id="btn-next-question" class="next-question btn thw-btn hide">NEXT QUESTION</button>
+    <p id="question-instructions">{{instructions}}</p>
+    <div class="question-container-outer">
+        <div class="question-container-inner">
+            <p>{{question}}</p>
+            <hr>
+            <span id="question-response-prefix">{{prefix}}</span><input type="text" name="question-response" id="question-response" value="">
+            <p id="text-question-answer" class="hide"></p>
+            <p>
+                <button name="submit-question-answer" id="submit-question-answer" class="btn thw-btn submit-question-answer" data-idx="{{idx}}" data-option="{{option}}">Submit</button>
+            </p>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-tmpl-mustache" id="char-rack-template">
+    <div id="chars" class="char-rack">
+        {{#chars}}
+        <a class="ch-btn char {{class}}" href="" data-idx="{{idx}}">{{label}}</a>
+        {{/chars}}
+    </div>
+</script>
+
+<script type="text/x-tmpl-mustache" id="choose-category-template">
+    <h2>Choose a category</h2>
+    {{#categories}}
+    <button id="category-{{idx}}" data-category-id="{{ci}}" data-lang="{{lang}}" class="btn thw-btn long-btn select-category show">{{cn}}</button>
+    {{/categories}}
+    <button id="category-{{categories.length}}" data-category-id="" data-lang="{{lang}}" class="btn thw-btn long-btn select-category show">Wild Card</button>
+</script>
+
+<script type="text/x-tmpl-mustache" id="choose-lesson-template">
+    <h2>Choose a lesson</h2>
+    {{#lessons}}
+    <button id="lesson-{{idx}}" data-lesson-id="{{li}}" data-lang="{{lang}}" class="btn thw-btn long-btn select-lesson show">{{ln}}</button>
+    {{/lessons}}
+    <button id="lesson-{{lessons.length}}" data-lesson-id="" data-lang="{{lang}}" class="btn thw-btn long-btn select-lesson show">Wild Card</button>
+</script>
+
+<script type="text/x-tmpl-mustache" id="choose-subject-template">
+    <h2>Choose a subject</h2>
+    {{#subjects}}
+    <button id="subject-{{idx}}" data-subject-id="{{ui}}" data-lang="{{lang}}" class="btn thw-btn long-btn select-subject show">{{un}}</button>
+    {{/subjects}}
+    <button id="subject-{{subjects.length}}" data-subject-id="" data-lang="{{lang}}" class="btn thw-btn long-btn select-subject show">Wild Card</button>
+</script>
+
+<script type="text/x-tmpl-mustache" id="choose-topic-template">
+    <h2>Choose a topic</h2>
+    {{#topics}}
+    <button id="topic-{{idx}}" data-topic-id="{{ti}}" data-lang="{{lang}}" class="btn thw-btn long-btn select-topic show">{{tn}}</button>
+    {{/topics}}
+    <button id="topic-{{topics.length}}" data-topic-id="" data-lang="{{lang}}" class="btn thw-btn long-btn select-topic show">Wild Card</button>
+</script>
+
+<script type="text/x-tmpl-mustache" id="congrats-msg-template">
+    <h2 class="hilite">{{msg}}</h2><h3>{{#perfectScore}}Perfect{{/perfectScore}} Score: {{score}}</h3>
+</script>
+
+<script type="text/x-tmpl-mustache" id="end-of-game-overlay-template">
+    <h1 class="hilite">{{title}}</h1>
+    <h3 class="overlay-para">{{details}}</h3>
+</script>
+
+<script type="text/x-tmpl-mustache" id="game-save-template">
+    <h1 class="hilite">Nice save!</h1><h3 class="overlay-para">You can continue your game.</h3>
+</script>
+
+<script type="text/x-tmpl-mustache" id="game-stats-template">
+    <article id="game-stats-panel" class="stats-panel">
+        <h3>Game Stats</h3>
+        <div class="info-div">
+            <table id="game-stats" class="stats-table">
+                <tbody>
+                    <tr>
+                        <td>Rounds / Plays</td>
+                        <td class="align-center">{{rounds }} / {{plays}}</td>
+                    </tr>
+                    <tr>
+                        <td>Thwords (solved / played)</td>
+                        <td class="align-center">{{thword.count}} / {{thword.total}} ({{thword.percent}}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Hits / Moves</td>
+                        <td class="align-center">{{move.count}} / {{move.total}} ({{move.percent}}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Strikes</td>
+                        <td class="align-center">{{move.strikes}}</td>
+                    </tr>
+                    <tr>
+                        <td>Points / Max Points</td>
+                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Current Hit Streak</td>
+                        <td class="align-center">{{hitStreak.current}}</td>
+                    </tr>
+                    <tr>
+                        <td>Longest Hit Streak</td>
+                        <td class="align-center">{{hitStreak.long}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bonus Questions</td>
+                        <td class="align-center">{{bonus.count}} / {{bonus.total}} ({{bonus.percent}}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Saves</td>
+                        <td class="align-center">{{save.count}} / {{save.total}} ({{save.percent}}%)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="general-feedback-template">
+    <article id="general-feedback-panel" class="help-panel">
+        <h3>Feedback</h3>
+        <div class="info-div2">
+            <hr>
+
+            <select id="general-feedback-subject" name="general-feedback-subject">
+                <option value="billing" style="display: none;">Billing</option>
+                <option value="correction">Correct an Answer or Question</option>
+                <option value="suggestion-general" selected>General Suggestion</option>
+                <option value="bug">Report a Bug</option>
+                <option value="suggestion-topics">Suggest Topics</option>
+                <option value="other">Other</option>
+            </select>
+
+            <h4 id="general-feedback-instr-comment" class="feedback-instr hide">Enter your comment.</h4>
+            <textarea id="general-feedback-text" name="general-feedback-text" maxlength="250"></textarea>
+            <a id="btn-general-feedback-cancel" class="btn-feedback feedback-submit" href="">Cancel</a>
+            <a id="btn-general-feedback-submit" class="btn-feedback feedback-submit feedback-submit-right show" href="">Submit</a>
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="help-template">
+    <article id="help-panel" class="help-panel">
+        <h3>Game Rules</h3>
+        <div class="info-div" style="max-width: 480px;">
+            <p style="margin: 16px 0; text-indent: 24px;">You will be presented with a topic and a list of from one to four words or phrases that correspond to that topic. The words or phrases that you are trying to solve are known as <span  class="hilite2">Thwords</span>.
+            <p style="margin: 16px 0; text-indent: 24px;">Your job is to select letter tiles to complete all of the <span  class="hilite2">Thwords</span>. If that's not simple enough, we also give you some letters for free.</p>
+            <p style="margin: 16px 0; text-indent: 24px;">For more detailed instructions <a href="http://thwords.com/how-to-play" target="_blank" style="text-decoration: none;"><span class="hilite">CLICK HERE</a> to visit the instructions on the main website.</p>
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="high-scores-template">
+    <article id="high-scores-panel" class="stats-panel">
+        <h3>High Scores</h3>
+        <div class="select-options">
+            <label style="display: inline-block; text-align: left;">
+                Game<br>
+                <select id="high-score-game" name="high-score-game" class="high-score-search-input">
+                    <option value="3-en-0">Anti-Thwords</option>
+                    <option value="2-en-4">Art & Literature Thwords</option>
+                    <option value="2-en-2">Entertainment Thwords</option>
+                    <option value="4-fr-0">French Thwords</option>
+                    <option value="2-en-1">Geography Thwords</option>
+                    <option value="4-de-0">German Thwords</option>
+                    <option value="2-en-3">History & Politics Thwords</option>
+                    <option value="4-is-0">Icelandic Thwords</option>
+                    <option value="4-it-0">Italian Thwords</option>
+                    <option value="4-pl-0">Polish Thwords</option>
+                    <option value="4-pt-0">Portuguese Thwords</option>
+                    <option value="6-en-0">Random Foreign Thwords</option>
+                    <option value="5-en-0">Random Thwords</option>
+                    <option value="4-ru-0">Russian Thwords</option>
+                    <option value="2-en-5">Science & Nature Thwords</option>
+                    <option value="4-es-0">Spanish Thwords</option>
+                    <option value="2-en-6">Sports & Recreation Thwords</option>
+                    <option value="2-en-0">Thword Plays</option>
+                    <option value="1-en-0" selected>Thwords</option>
+                    <option value="4-tr-0">Turkish Thwords</option>
+                    <option value="7-en-0">Totally Random Thwords</option>
+                    <option value="4-uk-0">Ukranian Thwords</option>
+                </select>
+            </label>
+            <label style="display: inline-block; text-align: left;">
+                Skill Level<br>
+                <select id="high-score-skill-level" name="high-score-skill-level" class="high-score-search-input">
+                    <option value="1">Novice</option>
+                    <option value="2" selected>Amateur</option>
+                    <option value="3">Pro</option>
+                    <option value="4">Expert</option>
+                </select>
+            </label>
+        </div>
+        <div class="info-div2">
+            <table class="high-scores-table">
+                <thead>
+                    <tr>
+                        <th>user</th>
+                        <th style="display: none;">gm</th>
+                        <th style="display: none;">ln</th>
+                        <th style="display: none;">sl</th>
+                        <th style="display: none;">kl</th>
+                        <th style="display: none;">ct</th>
+                        <th style="display: none;">bq</th>
+                        <th>plays</th>
+                        <th>Thwords<br>sol / pla</th>
+                        <th>hits / moves</th>
+                        <th>points / max pts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#scores}}
+                    <tr>
+                        <td>{{una}}</td>
+                        <td style="display: none;">{{ab}}</td>
+                        <td style="display: none;">{{al}}</td>
+                        <td style="display: none;">{{sla}}</td>
+                        <td style="display: none;">{{kla}}</td>
+                        <td style="display: none;">{{tca}}</td>
+                        <td style="display: none;">{{pba}}</td>
+                        <td>{{rd}}</td>
+                        <td>{{zc}} / {{zt}}</td>
+                        <td>{{mc}} / {{mt}} ({{mp}}%)</td>
+                        <td><b>{{pc}}</b> / {{pt}} ({{pp}}%)</td>
+                    </tr>
+                    {{/scores}}
+                </tbody>
+            </table>
+            <div class="footnote">
+                <ul>
+                    <li style="display: none;">gm = game (TH: Thwords, AT: Anti-Thwords, TP: Thword Plays, FT: Foreign Thwords, RT: Random Thwords, RFT: Random Forward Thwords, TRT: Totally Random Thwords
+                    <li style="display: none;">la = language (de: German, en: English, fr: French, is: Icelandic,it: Italian, pl: Polish, po: Portugeuse,ru: Russian, tr: Turkish, uk: Ukrainian</li>
+                    <li style="display: none;">sl = skill level (A: amateur, N: novice, P: professional, E: expert)</li>
+                    <li style="display: none;">kl = knowledge level (el: elementary, hs: high school, co: college, gr: graduate, do: doctorate, ge: genius, g+: super genius)</li>
+                    <li style="display: none;">ct = choose topic</li>
+                    <li style="display: none;">bq = bonus questions</li>
+                    <li>Thwords - sol= solved, pla = played</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="initializing-template">
+    <article id="round-stats-panel" class="stats-panel">
+        <div id="container-initializing" class="show">
+            <h2>Initializing ...</h2>
+            <img src="/img/loading7.gif" >
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="loading-template">
+    <article id="round-stats-panel" class="stats-panel">
+        <div id="container-initializing" class="show">
+            <h2>Loading ...</h2>
+            <img src="/img/loading.gif" >
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="round-stats-template">
+    <article id="round-stats-panel" class="stats-panel">
+        <h3>Round Stats</h3>
+        <div class="info-div">
+            <table id="round-stats" class="stats-table">
+                <tbody>
+                    <tr>
+                        <td>Plays</td>
+                        <td class="align-center">{{plays}}</td>
+                    </tr>
+                    <tr>
+                        <td>Thwords (solved / played)</td>
+                        <td class="align-center">{{thword.count}} / {{thword.total}}</td>
+                    </tr>
+                    <tr>
+                        <td>Hits / Moves</td>
+                        <td class="align-center">{{move.count}} / {{move.total}} ({{move.percent}}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Strikes</td>
+                        <td class="align-center">{{move.strikes}}</td>
+                    </tr>
+                    <tr>
+                        <td>Points / Max Points</td>
+                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</span></td>
+                    </tr>
+                    <tr>
+                        <td>Moves Left</td>
+                        <td class="align-center">{{move.remaining}}</td>
+                    </tr>
+                    <tr class="round-source" style="display: none;">
+                        <td colspan="2" style="white-space: wrap;">Thword Source: <p><a href="{{src}}" target="_blank">{{scc}}</a></p></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="settings-template">
+    <article id="settings-panel" class="settings-panel">
+        <h3>Settings</h3>
+        <div class="info-div">
+
+            <table class="settings-table">
+                <tr>
+                    <td colspan="2">
+                        Name<br>
+                        <input type="text" name="settings-user-name" id="settings-user-name" class="settings-input" value="{{user.name}}">
+                    </td>
+                </tr>
+            </table>
+
+            <table class="settings-table stats-table" style="margin-bottom: 24px;">
+                <tr id="start-skill-level">
+                    <td>Skill Level</td>
+                    <td>{{skillLevel}}</td>
+                </tr>
+                <!--
+                <tr id="start-knowledge-level">
+                    <td>Knowledge Level</td>
+                    <td>{{knowledgeLevel}}</td>
+                </tr>
+                <tr id="start-settings-category">
+                    <td>Choose Category</td>
+                    <td>{{chooseCategory}}</td>
+                </tr>
+                <tr id="start-settings-subject">
+                    <td>Choose Subject</td>
+                    <td>{{chooseSubject}}</td>
+                </tr>
+                <tr id="start-settings-topic">
+                    <td>Choose Topic</td>
+                    <td>{{chooseTopic}}</td>
+                </tr>
+                <tr id="start-settings-lesson">
+                    <td>Choose Lesson</td>
+                    <td>{{chooseLesson}}</td>
+                </tr>
+                <tr>
+                    <td>Bonus Questions</td>
+                    <td>{{bonusOnOptions}}</td>
+                </tr>
+                <tr style="display-none;">
+                    <td class="align-left">Domain</td>
+                    <td>{{settings.domain}}</td>
+                </tr>
+                <tr style="display-none;">
+                    <td class="align-left">API Domain</td>
+                    <td>{{settings.apiDomain}}</td>
+                </tr>
+                <tr style="display-none;">
+                    <td class="align-left">Overlay Div Delay</td>
+                    <td>{{settings.overlayDivDelay}}</td>
+                </tr>
+                <tr style="display-none;">
+                    <td class="align-left">Overlay Button Delay</td>
+                    <td>{{settings.overlayButtonDelay}}</td>
+                </tr>
+                <tr style="display-none;">
+                    <td class="align-left">Tile Flip Delay</td>
+                    <td>{{settings.tileFlipDelay}}</td>
+                </tr>
+                -->
+            </table>
+
+            <table class="settings-table">
+                <tr>
+                    <td colspan="2">
+                        <button id="cancel-settings" name="cancel-settings" class="btn thw-btn settings-btn" value="0">Cancel</button>
+                        <button id="save-settings" name="save-settings" class="btn thw-btn settings-btn" value="1">Save</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="start-settings-template">
+    <p class="label">Enter Your Name</p>
+    <p class="subscript">We only use your name to credit you if make our high scorers list.</p>
+    <input type="text" name="start-user-name" id="start-user-name" class="settings-input" value="{{user.name}}">
+
+    <div id="start-settings-langs">
+        <p class="label">Languages</p>
+        <select id="start-langs" name="start-langs" class="settings-input" multiple style="height: 6em;">
+            {{#langOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/langOptions}}
+        </select>
+    </div>
+
+    <div id="start-settings-skillLevel">
+        <p class="label">Skill Level<p>
+        <select id="start-skill-level" name="start-skill-level" class="settings-input">
+            Skill Level
+            {{#skillLevelOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/skillLevelOptions}}
+        </select>
+    </div>
+
+    <div id="start-settings-knowledge-level">
+        <p class="label">Knowledge Level</p>
+        <select id="start-knowledge-level" name="start-knowledge-level" class="settings-input">
+            {{#knowledgeLevelOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/knowledgeLevelOptions}}
+        </select>
+    </div>
+
+    <div id="start-settings-category">
+        <p class="label">Choose Categories</p>
+        <select id="start-choose-category" name="start-choose-category" class="settings-input">
+            {{#chooseCategoryOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/chooseCategoryOptions}}
+        </select>
+    </div>
+
+    <div id="start-settings-subject">
+        <p class="label">Choose Subjects</p>
+        <select id="start-choose-subject" name="start-choose-subject" class="settings-input">
+            {{#chooseSubjectOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/chooseSubjectOptions}}
+        </select>
+    </div>
+
+    <div id="start-settings-topic">
+        <p class="label">Choose Topics</p>
+        <select id="start-choose-topic" name="start-choose-topic" class="settings-input">
+            {{#chooseTopicOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/chooseTopicOptions}}
+        </select>
+    </div>
+
+    <div id="start-settings-lesson">
+        <p class="label">Choose Lessons</p>
+        <select id="start-choose-lesson" name="start-choose-lesson" class="settings-input">
+            {{#chooseLessonOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/chooseLessonOptions}}
+        </select>
+    </div>
+
+    <div id="start-settings-bonus-on">
+        <p class="label">Bonus Questions</p>
+        <select id="start-bonus-on" name="start-bonus-on" class="settings-input">
+            {{#bonusOnOptions}}
+            <option value="{{value}}">{{name}}</option>
+            {{/bonusOnOptions}}
+        </select>
+    </div>
+
+</script>
+
+<script type="text/x-tmpl-mustache" id="tile-rack-template">
+    <div class="tile-rack {{class}}" data-idx="{{idx}}">
+        {{#tiles}}
+        <div class="tile-container">
+            <div id="tile-{{idx}}-{{pos}}" class="tile" data-idx="{{idx}}" data-pos="{{pos}}">
+                <figure class="front">&nbsp;</figure>
+                <figure class="back">{{label}}</figure>
+            </div>
+        </div>
+        {{/tiles}}
+    </div>
+</script>
+
+<script type="text/x-tmpl-mustache" id="tile-values-template">
+    <article id="tile-values-panel" class="tile-values-panel">
+        <h3>Tile Values</h3>
+        <div class="info-div">
+            <table class="tile-value-table">
+                <thead>
+                    <tr>
+                        <th>Character</th>
+                        <th>Right</th>
+                        <th>Wrong</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#tiles}}
+                    <tr>
+                        <td>{{label}}</td>
+                        <td>{{right}}</td>
+                        <td>-{{wrong}}</td>
+                    </tr>
+                    {{/tiles}}
+                </tbody>
+            </table>
+            <h2 class="premature-tile-value-msg {{prematureMsgClass}}">The tile values cannot be displayed until the play has started.</h2>
+        </div>
+    </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="wrong-answer-template">
+        <h4>Wrong!<h4><hr>The correct answer is:<p>{{correctAnswer}}</p>
+</script>
+
+</body>
+</html>
