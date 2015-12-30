@@ -101,7 +101,7 @@ $(document).ready(function(){
         var processingFlag = false;
 
         // settings
-        var version = "1.0.0",
+        var version = "1.0.1",
             copyright = 2015;
 
         // games
@@ -573,6 +573,19 @@ $(document).ready(function(){
 
             ["timeStamp", Date.now(), "ts" ]              // time stamp
         ];
+
+        var accentMap = {
+            "á":"a", "à":"a", "ä":"a", "â":"a", "å":"a", "æ":"a", "α":"a", "ã":"a",
+            "ç":"c",
+            "é":"e", "è":"e", "ë":"e", "ê":"e", "ε":"e", "η":"e",
+            "ğ":"g",
+            "í":"i", "ì":"i", "ï":"i", "î":"i", "ι":"i", "ı":"i",
+            "ñ":"n",
+            "ó":"o", "ò":"o", "ö":"o", "ô":"o", "œ":"o", "ο":"o", "ω":"o", "ø":"o", "õ":"o",
+            "ş":"s",
+            "ú":"u", "ù":"u", "ü":"u", "û":"u", "υ":"u",
+            "ÿ":"y"
+        }
 
         // initialize settings / user / group / game / round / play
         if (!newGame) {
@@ -1178,6 +1191,17 @@ $(document).ready(function(){
                 settings.ga("Error", "selectTopic", e.toString());
             }
         };
+
+        function accentFold(textStr)
+        {
+            if (!textStr) { return ''; }
+            var retStr = '';
+            for (var i=0; i < textStr.length; i++) {
+                retStr += accentMap[textStr.charAt(i)] || textStr.charAt(i);
+            }
+
+            return retStr;
+        }
 
         function addHit() {
 
@@ -4092,7 +4116,11 @@ $(document).ready(function(){
                 var idx = parseInt($(btn).data("idx"));
                 var option = parseInt($(btn).data("option"));
 
-                var correct = compareTextStrings($("#question-response-prefix").text() + $("#question-response").val(), play.bonusQuestions.questions[idx].a);
+                var correct = compareTextStrings(
+                    $("#question-response-prefix").text() + $("#question-response").val(),
+                    play.bonusQuestions.questions[idx].a,
+                    true
+                );
                 var points = play.bonusQuestions.questions[idx].p;
 
                 // disable the input text box
@@ -4100,6 +4128,9 @@ $(document).ready(function(){
 
                 if (correct) {
                     $("#question-response").addClass("success");
+
+                    // show actual answer so all accented characters are displayed
+                    $("#question-response").html(play.bonusQuestions.questions[idx].a);
 
                     overlayButton("Correct",
                         {
@@ -4123,9 +4154,10 @@ $(document).ready(function(){
             }
         }
 
-        function compareTextStrings(str1, str2) {
+        function compareTextStrings(str1, str2, useAccentFolding) {
             var s1 = str1;
             var s2 = str2;
+            useAccentFolding = (typeof useAccentFolding !== "undefined") ? useAccentFolding : false;
 
             // trim white space
             s1 = s1.trim();
@@ -4134,6 +4166,11 @@ $(document).ready(function(){
             // convert the strings to lower case
             s1 = s1.toLowerCase();
             s2 = s2.toLowerCase();
+
+            if (useAccentFolding) {
+                s1 = accentFold(s1);
+                s2 = accentFold(s2);
+            }
 
             return (s1.localeCompare(s2) === 0) ? 1 : 0;
         }
@@ -4179,7 +4216,7 @@ $(document).ready(function(){
 
             // set preferred langs
             if ($("#start-langs").length) {
-                gameOptions.langs = $("#start-langs").val(); alert($("#start-langs").val().toSource())
+                gameOptions.langs = $("#start-langs").val();
                 if (!$("#start-langs").val()
                     || (([5, 6, 7, 8].indexOf(game.id) > -1) && ($("#start-langs").val().length <2))
                     ) {
