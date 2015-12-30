@@ -463,7 +463,7 @@ $(document).ready(function(){
             ["apiDomain", null, "ad"],                    // current api domain
             ["apiDomains", [document.domain], "as"],      // array of all api domains
             ["statsDomain", null, "sd"],                  // statistics domain
-            ["showAds", 1, "ads"] ,                       // display ads (1=yes, 0=no)
+            ["showAds", 0, "ads"] ,                       // display ads (1=yes, 0=no)
             ["overlayDivDelay", 0, "odd"],                // default delay to hide overlay div
             ["overlayButtonDelay", 500, "obd"],           // default delay to hide overlay button
             ["tileFlipDelay", 300, "tfd" ],               // delay between each tile flip
@@ -1322,10 +1322,14 @@ $(document).ready(function(){
 
         function bindPageEvents() {
 
-            $("#btn-close-ad").on("click", function(elem) {
+            $(".close-ad").on("click", function(elem) {
                 elem.preventDefault();
-                $("#ad-content").removeClass("show").addClass("hide");
-                $("#overlay-ad").removeClass("show").addClass("hide");
+                hideAdOverlay();
+
+                if (parseInt(settings.getProperty("showAds")) == 1) {
+                    // pre-load next ad
+                    loadAdOverlay();
+                }
             });
 
             $("#btn-topic-feedback-cancel").on("click", function(elem) {
@@ -1479,10 +1483,6 @@ $(document).ready(function(){
             $("#menuContentLayer").on("click", function(elem) {
                 elem.preventDefault();
                 closeMenu();
-            });
-
-            $(".new-game").on("click", function(elem) {
-                newGame();
             });
 
             $(".overlay-continue-btn").on("click", function(elem) {
@@ -2227,28 +2227,6 @@ $(document).ready(function(){
             return "?";
         }
 
-        function getTileRack(tiles, idx) {
-
-            var rowClass = (idx % 2) ? "odd-row" : "even-row";
-
-            // create the rack
-            var rack = '<div class="tile-rack '+rowClass+'" data-idx="'+idx+'">';
-            for (var pos=0; pos<tiles.length; pos++) {
-// @TODO: USE MUSTACHE TEMPLATE
-//                rack += '<span id="tile-'+idx+'-'+pos+'" class="tile unsolved" data-idx="'+idx+'" data-pos="'+pos+'">&nbsp;</span>';
-
-                rack += '<div class="tile-container">';
-                rack += '<div id="tile-'+idx+'-'+pos+'" class="tile" data-idx="'+idx+'" data-pos="'+pos+'">';
-                rack += '<figure class="front">&nbsp;</figure>';
-                rack += '<figure class="back">'+tiles[pos].l+'</figure>';
-                rack += '</div>'
-                rack += '</div>';
-            }
-            rack += "</div>";
-
-            return rack;
-        }
-
         function getUrlParameter(sParam) {
             var sPageUrl = window.location.search.substring(1);
             var sUrlVariables = sPageUrl.split('&');
@@ -2295,8 +2273,31 @@ $(document).ready(function(){
             return json ? paramsJson : paramsArray;
         }
 
+        function hideAdOverlay() {
+            $("#overlay-ad").removeClass("show").addClass("hide");
+        }
+
         function hideGamePanel(name) {
             $("#game-panel-"+name).removeClass("show").addClass("hide");
+        }
+
+        function loadAdOverlay() {
+            var url = "/ad";
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                async: false,
+                contentType: "text/html",
+                data: {},
+                success: function(adHtml) {
+                    $("#ad-content").html(adHtml);
+                },
+                error: function(e) {
+                    try {settings.ga("Error", "load-ad", "url: "+url)} catch (e) {};
+                    console.log("Load Ad Error:");
+                }
+            });
         }
 
         function loadPlay(data) {
@@ -3582,17 +3583,29 @@ $(document).ready(function(){
             // add random integer to break browser cache
             $(".next-round-link").attr("href", url.toString().replace("/play/", "/next/")+"?" + Math.floor((Math.random() * 100000000) + 1));
 
-            if (parseInt(settings.getProperty("showAds")) === 0) {
-                // don't show ads (ie. don't load next page)
-                $(".next-round-link").on("click", function(elem) {
-                    elem.preventDefault();
-                    startRound();
-                });
-            } else {
-                // remove onbeforeunload event so we can go to "next" page
-                $(".next-round-link").on("click", function(elem) {
-                    window.onbeforeunload = function() {};
-                });
+            switch (parseInt(settings.getProperty("showAds"))) {
+                case 1: // pre-load ads
+                    hideAdOverlay();
+                    loadAdOverlay();
+                    $(".next-round-link").on("click", function (elem) {
+                        elem.preventDefault();
+                        showAdOverlay();
+                        startRound();
+                    });
+                    break;
+                case 2: // use Next Round link
+                    // remove onbeforeunload event so we can go to "next" page
+                    $(".next-round-link").on("click", function(elem) {
+                        window.onbeforeunload = function() {};
+                    });
+                    break;
+                case 0: // no ads - don't show ads (ie. don't load next page)
+                default:
+                    $(".next-round-link").on("click", function (elem) {
+                        elem.preventDefault();
+                        startRound();
+                    });
+                    break;
             }
         }
 
@@ -3634,6 +3647,10 @@ $(document).ready(function(){
             closeMenu();
 
             overlayDiv(renderAboutHtml(), {type: "standard"});
+        }
+
+        function showAdOverlay() {
+            $("#overlay-ad").removeClass("hide").addClass("show");
         }
 
         function showButton(name, resetButtons) {
