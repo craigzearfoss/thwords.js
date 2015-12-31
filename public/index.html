@@ -5,8 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <title>Thwords - The Original Synonym Game</title>
-    <meta http-equiv="description" content="Thwords is a free online word game.  You are given a definition and must complete a list synonyms by selecting letters. Have fun as you increase your vocabulary. Challenge yourself and your friends to see how high you can score.">
-    <meta http-equiv="keywords" content="online word games, free online word games, word games online, single player word games, educational games, trivia games, language games, vocabulary, antonyms, spelling, trivia, scrabble, scramble">
+    <meta name="description" content="Thwords is a free online word game.  You are given a definition and must complete a list synonyms by selecting letters. Have fun as you increase your vocabulary. Challenge yourself and your friends to see how high you can score.">
+    <meta name="keywords" content="online word games, free online word games, word games online, single player word games, educational games, trivia games, language games, vocabulary, antonyms, spelling, trivia, scrabble, scramble">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -24,7 +24,7 @@
 
     <div id="container-initializing" class="hide">
         <h2>Initializing</h2>
-        <img src="/img/loading7.gif">
+        <img src="/img/loading7.gif" alt="loading ...">
     </div>
 
     <div id="container-content" class="show">
@@ -197,10 +197,10 @@
                 <tbody>
                     <tr>
                         <td>
-                            <button id="btn-embed-link" class="share-btn"><img src="/img/icon_embed.png"><span class="btn-txt">Embed</span></button>
+                            <button id="btn-embed-link" class="share-btn"><img src="/img/icon_embed.png" alt="embed icon"><span class="btn-txt">Embed</span></button>
                         </td>
                         <td>
-                            <button id="btn-link-link" class="share-btn"><img src="/img/icon_linkexternal.png"><span class="btn-txt">Link</span></button>
+                            <button id="btn-link-link" class="share-btn"><img src="/img/icon_linkexternal.png" alt="share link icon"><span class="btn-txt">Link</span></button>
                         </td>
                     </tr>
                 </tbody>
@@ -766,6 +766,10 @@
                         <td class="align-center">{{rounds }} / {{plays}}</td>
                     </tr>
                     <tr>
+                        <td>Points / Max Points</td>
+                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</td>
+                    </tr>
+                    <tr>
                         <td>Thwords (solved / played)</td>
                         <td class="align-center">{{thword.count}} / {{thword.total}} ({{thword.percent}}%)</td>
                     </tr>
@@ -776,10 +780,6 @@
                     <tr>
                         <td>Strikes</td>
                         <td class="align-center">{{move.strikes}}</td>
-                    </tr>
-                    <tr>
-                        <td>Points / Max Points</td>
-                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</td>
                     </tr>
                     <tr>
                         <td>Current Hit Streak</td>
@@ -932,7 +932,7 @@
     <article id="round-stats-panel" class="stats-panel">
         <div id="container-initializing" class="show">
             <h2>Initializing ...</h2>
-            <img src="/img/loading7.gif" >
+            <img src="/img/loading7.gif" alt="initializing ..." >
         </div>
     </article>
 </script>
@@ -941,7 +941,7 @@
     <article id="round-stats-panel" class="stats-panel">
         <div id="container-initializing" class="show">
             <h2>Loading ...</h2>
-            <img src="/img/loading.gif" >
+            <img src="/img/loading.gif" alt="loading ...">
         </div>
     </article>
 </script>
@@ -953,8 +953,8 @@
             <table id="round-stats" class="stats-table">
                 <tbody>
                     <tr>
-                        <td>Plays</td>
-                        <td class="align-center">{{plays}}</td>
+                        <td>Points / Max Points</td>
+                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</span></td>
                     </tr>
                     <tr>
                         <td>Thwords (solved / played)</td>
@@ -967,10 +967,6 @@
                     <tr>
                         <td>Strikes</td>
                         <td class="align-center">{{move.strikes}}</td>
-                    </tr>
-                    <tr>
-                        <td>Points / Max Points</td>
-                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</span></td>
                     </tr>
                     <tr>
                         <td>Moves Left</td>

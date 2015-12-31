@@ -101,7 +101,7 @@ $(document).ready(function(){
         var processingFlag = false;
 
         // settings
-        var version = "1.0.1",
+        var version = "1.0.2",
             copyright = 2015;
 
         // games
@@ -1534,7 +1534,15 @@ $(document).ready(function(){
 
             $(".show-high-scores-overlay").on("click", function(elem) {
                 elem.preventDefault();
-                showHighScoresOverlay();
+                var params = {};
+                if ((typeof play !== "undefined") && !$.isEmptyObject(play)) {
+                    params.gameId     = play.getProperty("id");
+                    params.lang       = play.getProperty("lang");
+                    params.skillLevel = play.getProperty("skillLevel");
+                    params.knowledgeLevel = play.getProperty("knowledgeLevel");
+                    params.categoryId = play.getProperty("category_id");
+                }
+                showHighScoresOverlay(params);
             });
 
             $(".show-round-stats-overlay").on("click", function(elem) {
@@ -2292,6 +2300,15 @@ $(document).ready(function(){
                 data: {},
                 success: function(adHtml) {
                     $("#ad-content").html(adHtml);
+                    try {
+                        if (!$("#ad-overlay-iframe").length) {
+                            settings.ga("Ad", "load-error", "No ad-overlay-iframe found.");
+                        } else if (!$("#ad-overlay-iframe").attr("src").length) {
+                            settings.ga("Ad", "load-error", "No ad-overlay-iframe src attribute found.");
+                        } else {
+                            settings.ga("Ad", "load", $("#ad-overlay-iframe").attr("src"));
+                        }
+                    } catch (e) {}
                 },
                 error: function(e) {
                     try {settings.ga("Error", "load-ad", "url: "+url)} catch (e) {};
@@ -3650,6 +3667,15 @@ $(document).ready(function(){
         }
 
         function showAdOverlay() {
+            try {
+                if (!$("#ad-overlay-iframe").length) {
+                    settings.ga("Ad", "show-error", "No ad-overlay-iframe found.");
+                } else if (!$("#ad-overlay-iframe").attr("src").length) {
+                    settings.ga("Ad", "show-error", "No ad-overlay-iframe src attribute found.");
+                } else {
+                    settings.ga("Ad", "show", $("#ad-overlay-iframe").attr("src"));
+                }
+            } catch (e) {}
             $("#overlay-ad").removeClass("hide").addClass("show");
         }
 
