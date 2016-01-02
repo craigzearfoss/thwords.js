@@ -767,7 +767,7 @@
                     </tr>
                     <tr>
                         <td>Points / Max Points</td>
-                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</td>
+                        <td class="align-center"><b>{{point.count}}</b> / {{point.total}} ({{point.percent}}%)</td>
                     </tr>
                     <tr>
                         <td>Thwords (solved / played)</td>
@@ -932,7 +932,7 @@
     <article id="round-stats-panel" class="stats-panel">
         <div id="container-initializing" class="show">
             <h2>Initializing ...</h2>
-            <img src="/img/loading7.gif" alt="initializing ..." >
+            <img src="/img/loading7.gif" alt="initializing ...">
         </div>
     </article>
 </script>
@@ -954,7 +954,7 @@
                 <tbody>
                     <tr>
                         <td>Points / Max Points</td>
-                        <td class="align-center">{{point.count}} / {{point.total}} ({{point.percent}}%)</span></td>
+                        <td class="align-center"><b>{{point.count}}</b> / {{point.total}} ({{point.percent}}%)</span></td>
                     </tr>
                     <tr>
                         <td>Thwords (solved / played)</td>
@@ -1156,28 +1156,40 @@
 <script type="text/x-tmpl-mustache" id="tile-values-template">
     <article id="tile-values-panel" class="tile-values-panel">
         <h3>Tile Values</h3>
-        <div class="info-div">
-            <table class="tile-value-table">
-                <thead>
-                    <tr>
-                        <th>Character</th>
-                        <th>Right</th>
-                        <th>Wrong</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#tiles}}
-                    <tr>
-                        <td>{{label}}</td>
-                        <td>{{right}}</td>
-                        <td>-{{wrong}}</td>
-                    </tr>
-                    {{/tiles}}
-                </tbody>
-            </table>
-            <h2 class="premature-tile-value-msg {{prematureMsgClass}}">The tile values cannot be displayed until the play has started.</h2>
+        <div class="select-options">
+            <label style="display: inline-block; text-align: left;">
+                Language<br>
+                <select id="tile-values-lang" name="tile-values-lang" class="high-score-search-input">
+                {{#options}}
+                    <option value="{{name}}">{{value}}</option>
+                {{/options}}
+                </select>
+            </label>
+        </div>
+        <div id="tile-value-table-container" class="info-div">
         </div>
     </article>
+</script>
+
+<script type="text/x-tmpl-mustache" id="tile-values-table-template">
+    <table class="tile-value-table">
+        <thead>
+            <tr>
+                <th>Character</th>
+                <th>Right</th>
+                <th>Wrong</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#tiles}}
+            <tr>
+                <td>{{{label}}}</td>
+                <td>{{right}}</td>
+                <td>{{wrong}}</td>
+            </tr>
+            {{/tiles}}
+        </tbody>
+    </table>
 </script>
 
 <script type="text/x-tmpl-mustache" id="wrong-answer-template">

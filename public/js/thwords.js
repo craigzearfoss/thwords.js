@@ -79,8 +79,8 @@ $(document).ready(function(){
         // turn on/off debugging
         setDebug(getUrlParameter("debug") || false);
 
-        // bind page events to DOM elements
-        bindPageEvents();
+        // bind before load events to DOM elements
+        bindPageEventsBeforeLoad();
 
         // get options
         if ((typeof woggle === "undefined") || $.isEmptyObject(woggle)) {
@@ -276,6 +276,7 @@ $(document).ready(function(){
             startSettingsTemplate =  document.getElementById("start-settings-template").innerHTML,
             tileRackTemplate =  document.getElementById("tile-rack-template").innerHTML,
             tileValuesTemplate =  document.getElementById("tile-values-template").innerHTML,
+            tileValuesTableTemplate =  document.getElementById("tile-values-table-template").innerHTML,
             wrongAnswerTemplate =  document.getElementById("wrong-answer-template").innerHTML;
 
         // get the default variables for the game
@@ -458,120 +459,121 @@ $(document).ready(function(){
 
         // define settngs properties
         var settingsProperties = [
-            ["sessionId", sessionId, "se"],               // session id
-            ["domain", document.domain, "dm"],            // game domain
-            ["apiDomain", null, "ad"],                    // current api domain
-            ["apiDomains", [document.domain], "as"],      // array of all api domains
-            ["statsDomain", null, "sd"],                  // statistics domain
-            ["showAds", 0, "ads"] ,                       // display ads (1=yes, 0=no)
-            ["overlayDivDelay", 0, "odd"],                // default delay to hide overlay div
-            ["overlayButtonDelay", 500, "obd"],           // default delay to hide overlay button
-            ["tileFlipDelay", 300, "tfd" ],               // delay between each tile flip
-            ["timeStamp", Date.now(), "ts" ]              // time stamp
+            ["sessionId", sessionId, "se"],                 // session id
+            ["domain", document.domain, "dm"],              // game domain
+            ["apiDomain", null, "ad"],                      // current api domain
+            ["apiDomains", [document.domain], "as"],        // array of all api domains
+            ["statsDomain", null, "sd"],                    // statistics domain
+            ["showAds", 0, "ads"] ,                         // display ads (1=yes, 0=no)
+            ["adUrl", "http://ads.thwords.com/ad", "adu"] , // display ads (1=yes, 0=no)
+            ["overlayDivDelay", 0, "odd"],                  // default delay to hide overlay div
+            ["overlayButtonDelay", 500, "obd"],             // default delay to hide overlay button
+            ["tileFlipDelay", 300, "tfd" ],                 // delay between each tile flip
+            ["timeStamp", Date.now(), "ts" ]                // time stamp
         ];
 
         // define user properties
         var userProperties = [
-            ["sessionId", sessionId, "se"],               // session id
-            ["id", null, "id"],                           // user id
-            ["name", null, "na"],                         // user name
-            ["username", null, "un"],                     // user username
-            ["email", null, "em"],                        // user email
-            ["lang", "en", "al"],                         // user lang (only en for now)
-            ["langs", [], "ap"],                          // user preferred langs (defaults to all)
-            ["timeStamp", Date.now(), "ts" ]              // time stamp
+            ["sessionId", sessionId, "se"],                 // session id
+            ["id", null, "id"],                             // user id
+            ["name", null, "na"],                           // user name
+            ["username", null, "un"],                       // user username
+            ["email", null, "em"],                          // user email
+            ["lang", "en", "al"],                           // user lang (only en for now)
+            ["langs", [], "ap"],                            // user preferred langs (defaults to all)
+            ["timeStamp", Date.now(), "ts" ]                // time stamp
         ];
 
         // define group properties
         var groupProperties = [
-            ["sessionId", sessionId, "se"],               // session id
-            ["id", null, "id"],                           // group id
-            ["name", null, "na"],                         // group name
-            ["timeStamp", Date.now(), "ts" ]              // time stamp
+            ["sessionId", sessionId, "se"],                 // session id
+            ["id", null, "id"],                             // group id
+            ["name", null, "na"],                           // group name
+            ["timeStamp", Date.now(), "ts" ]                // time stamp
         ];
 
         // define game/round/play properties
         var thwordProperties = [
-            ["sessionId", sessionId, "se"],               // session id
-            ["id", -1, "id"],                             // game id
-            ["status", -1, "ga"],                         // game status (-1=not started, 1=active, 0=over)
-            ["count", 0, "go"],                           // number of times this game has been played
-            ["name", "Thwords", "gn"],                    // game name
-            ["shortName", "Thwords", "sn"],               // game short name
-            ["abbrev", "TH", "ab"],                       // game abbreviation
-            ["description", null, "gd"],                  // game description
-            ["details", null, "gt"],                      // game details
-            ["slug", "thwords", "gg"],                    // game slug
-            ["url", window.location.href, "ur"],          // game url
-            ["random", 0, "gr"],                          // is this a randomized game? (0 or 1)
-            ["lang", "en", "al"],                         // game lang
-            ["langs", foreignLangs, "ap"],                // game preferred langs
-            ["knowledgeLevel", 2, "gk"],                  // game knowledge level
-            ["skillLevel", 2, "gs"],                      // game skill level
-            ["maxPlays", -1, "gm"],                       // maximum number of times this game can be played (-1=unlimited)
-            ["category-choose", 0, "cc"],                 // user chooses categories (1=yes or 0=no)
-            ["category-id", 0, "ci"],                     // category id
-            ["category-name", null, "cn"],                // category name
-            ["category-max", 1, "cm"],                    // maximum number of times that this category can be played
-            ["category-count", 0, "co"],                  // number of times that this category has been played
-            ["category-played", [], "cp"],                // array of category ids played
-            ["subject-choose", 0, "uc"],                  // user chooses subjects (1=yes or 0=no)
-            ["subject-id", 0, "ui"],                      // subject id
-            ["subject-name", null, "un"],                 // subject name
-            ["subject-max", 1, "um"],                     // maximum number of times that this subject can be played
-            ["subject-count", 0, "uo"],                   // number of times that this subject has been played
-            ["subject-played", [], "up"],                 // array of subject ids played
-            ["topic-choose", 0, "tc"],                    // user chooses topics (1=yes or 0=no)
-            ["topic-id", 0, "ti"],                        // topic id
-            ["topic-name", null, "tn"],                   // topic name
-            ["topic-lang", "en", "tl"],                   // topic lang
-            ["topic-description", null, "td"],            // topic description
-            ["topic-details", null, "tt"],                // topic details
-            ["topic-max", 1, "tm"],                       // maximum number of times that this topic can be played
-            ["topic-count", 0, "to"],                     // number of times that this topic has been played
-            ["topic-played", [], "tp"],                   // array of topic ids played
-            ["lesson-choose", 0, "lc"],                   // user chooses lessons (1=yes or 0=no)
-            ["lesson-id", 0, "li"],                       // lesson id
-            ["lesson-name", null, "ln"],                  // lesson name
-            ["lesson-max", 1, "lm"],                      // maximum number of times that this lesson can be played
-            ["lesson-count", 0, "lo"],                    // number of times that this lesson has been played
-            ["lesson-played", [], "lp"],                  // array of lesson ids played
-            ["thword-total", 0, "zt"],                    // total number of Thwords played
-            ["thword-count", 0, "zc"],                    // count of Thwords solved
-            ["thword-percent", null, "zp"],               // percent of Thwords solved
-            ["move-max", 0, "mm"],                        // maximum number of moves allowed
-            ["move-total", 0, "mt"],                      // total moves available
-            ["move-count",  0, "mc"],                     // count of move hits
-            ["move-percent", null, "mp"],                 // move hit percent
-            ["move-strikes", 0, "mx"],                    // move strikes
-            ["move-remaining", 0, "mr"],                  // move hit percent
-            ["point-total", 0, "pt"],                     // total points available
-            ["point-count", 0, "pc"],                     // count of points
-            ["point-percent", null, "pp"],                // point percent
-            ["bonus-on", 1, "pb"],                        // play bonus questions (1=yes or 0=no)
-            ["bonus-total", 0, "bt"],                     // total bonuses available
-            ["bonus-count", 0, "bc"],                     // count of bonuses solved
-            ["bonus-value", 0, "bv"],                     // bonus points value
-            ["bonus-percent", null, "bp"],                // bonus solved percent
-            ["save-on", 1, "ps"],                         // are save attempts allowed?
-            ["save-status", -1, "sa"],                    // are we in the middle of a save attempt
-            ["save-total", 0, "st"],                      // total saves available
-            ["save-count", 0, "sc"],                      // count of successful saves
-            ["save-percent", null, "sp"],                 // save percent
-            ["hitStreak-current", 0, "hc"],               // current hit streak
-            ["hitStreak-long", 0, "hl"],                  // longest hit streak
+            ["sessionId", sessionId, "se"],                 // session id
+            ["id", -1, "id"],                               // game id
+            ["status", -1, "ga"],                           // game status (-1=not started, 1=active, 0=over)
+            ["count", 0, "go"],                             // number of times this game has been played
+            ["name", "Thwords", "gn"],                      // game name
+            ["shortName", "Thwords", "sn"],                 // game short name
+            ["abbrev", "TH", "ab"],                         // game abbreviation
+            ["description", null, "gd"],                    // game description
+            ["details", null, "gt"],                        // game details
+            ["slug", "thwords", "gg"],                      // game slug
+            ["url", window.location.href, "ur"],            // game url
+            ["random", 0, "gr"],                            // is this a randomized game? (0 or 1)
+            ["lang", "en", "al"],                           // game lang
+            ["langs", foreignLangs, "ap"],                  // game preferred langs
+            ["knowledgeLevel", 2, "gk"],                    // game knowledge level
+            ["skillLevel", 2, "gs"],                        // game skill level
+            ["maxPlays", -1, "gm"],                         // maximum number of times this game can be played (-1=unlimited)
+            ["category-choose", 0, "cc"],                   // user chooses categories (1=yes or 0=no)
+            ["category-id", 0, "ci"],                       // category id
+            ["category-name", null, "cn"],                  // category name
+            ["category-max", 1, "cm"],                      // maximum number of times that this category can be played
+            ["category-count", 0, "co"],                    // number of times that this category has been played
+            ["category-played", [], "cp"],                  // array of category ids played
+            ["subject-choose", 0, "uc"],                    // user chooses subjects (1=yes or 0=no)
+            ["subject-id", 0, "ui"],                        // subject id
+            ["subject-name", null, "un"],                   // subject name
+            ["subject-max", 1, "um"],                       // maximum number of times that this subject can be played
+            ["subject-count", 0, "uo"],                     // number of times that this subject has been played
+            ["subject-played", [], "up"],                   // array of subject ids played
+            ["topic-choose", 0, "tc"],                      // user chooses topics (1=yes or 0=no)
+            ["topic-id", 0, "ti"],                          // topic id
+            ["topic-name", null, "tn"],                     // topic name
+            ["topic-lang", "en", "tl"],                     // topic lang
+            ["topic-description", null, "td"],              // topic description
+            ["topic-details", null, "tt"],                  // topic details
+            ["topic-max", 1, "tm"],                         // maximum number of times that this topic can be played
+            ["topic-count", 0, "to"],                       // number of times that this topic has been played
+            ["topic-played", [], "tp"],                     // array of topic ids played
+            ["lesson-choose", 0, "lc"],                     // user chooses lessons (1=yes or 0=no)
+            ["lesson-id", 0, "li"],                         // lesson id
+            ["lesson-name", null, "ln"],                    // lesson name
+            ["lesson-max", 1, "lm"],                        // maximum number of times that this lesson can be played
+            ["lesson-count", 0, "lo"],                      // number of times that this lesson has been played
+            ["lesson-played", [], "lp"],                    // array of lesson ids played
+            ["thword-total", 0, "zt"],                      // total number of Thwords played
+            ["thword-count", 0, "zc"],                      // count of Thwords solved
+            ["thword-percent", null, "zp"],                 // percent of Thwords solved
+            ["move-max", 0, "mm"],                          // maximum number of moves allowed
+            ["move-total", 0, "mt"],                        // total moves available
+            ["move-count",  0, "mc"],                       // count of move hits
+            ["move-percent", null, "mp"],                   // move hit percent
+            ["move-strikes", 0, "mx"],                      // move strikes
+            ["move-remaining", 0, "mr"],                    // move hit percent
+            ["point-total", 0, "pt"],                       // total points available
+            ["point-count", 0, "pc"],                       // count of points
+            ["point-percent", null, "pp"],                  // point percent
+            ["bonus-on", 1, "pb"],                          // play bonus questions (1=yes or 0=no)
+            ["bonus-total", 0, "bt"],                       // total bonuses available
+            ["bonus-count", 0, "bc"],                       // count of bonuses solved
+            ["bonus-value", 0, "bv"],                       // bonus points value
+            ["bonus-percent", null, "bp"],                  // bonus solved percent
+            ["save-on", 1, "ps"],                           // are save attempts allowed?
+            ["save-status", -1, "sa"],                      // are we in the middle of a save attempt
+            ["save-total", 0, "st"],                        // total saves available
+            ["save-count", 0, "sc"],                        // count of successful saves
+            ["save-percent", null, "sp"],                   // save percent
+            ["hitStreak-current", 0, "hc"],                 // current hit streak
+            ["hitStreak-long", 0, "hl"],                    // longest hit streak
 
-            ["thwords", {}, "tz"],                        // thwords
-            ["char-played", [], "ch" ],                   // characters played
-            ["tile-flipped", [], "tf" ],                  // tiles flipped
+            ["thwords", {}, "tz"],                          // thwords
+            ["char-played", [], "ch" ],                     // characters played
+            ["tile-flipped", [], "tf" ],                    // tiles flipped
 
-            ["quiz", {}, "qz"],                           // quiz
+            ["quiz", {}, "qz"],                             // quiz
 
-            ["survey", {}, "su"],                         // survey
+            ["survey", {}, "su"],                           // survey
 
-            ["bonusQuestions", {}, "bq"],                 // bonus questions
+            ["bonusQuestions", {}, "bq"],                   // bonus questions
 
-            ["timeStamp", Date.now(), "ts" ]              // time stamp
+            ["timeStamp", Date.now(), "ts" ]                // time stamp
         ];
 
         var accentMap = {
@@ -591,7 +593,6 @@ $(document).ready(function(){
         if (!newGame) {
 
             // continuation of an existing game
-
             // create the settings, user, group, game, round and play object
             var settings = new Woggle("settings", {}, settingsProperties, savedSettings);
             var user = new Woggle("user", {}, userProperties, savedUser);
@@ -599,6 +600,7 @@ $(document).ready(function(){
             var game = new Woggle("game", {}, thwordProperties, savedGame);
             var round = new Woggle("round", {parent: game}, thwordProperties, savedRound);
             var play = new Woggle("play", {parent: round}, thwordProperties, savedPlay);
+
         } else {
             // start a new game
 
@@ -611,8 +613,9 @@ $(document).ready(function(){
 
             // create the settings object
             // use saved settings, but override them with the specified settings for the current game
+
             var settings = new Woggle("settings", {}, settingsProperties, savedSettings);
-            if (!$.isEmptyObject(woggle.settings)) {
+            if ((typeof woggle.settings !== "undefined") && !$.isEmptyObject(woggle.settings)) {
                 $.each(woggle.settings, function(property, value) {
                     settings.setProperty(property, value);
                 });
@@ -1010,6 +1013,17 @@ $(document).ready(function(){
         $("#container-content").removeClass("hide").addClass("show");
         $("#container-initializing").removeClass("show").addClass("hide");
 
+        // bind after load events to DOM elements
+        bindPageEventsAfterLoad();
+
+        // hide the ad overlay except when we are loading a new page for each round
+        // because for those we show the ad first
+        if (document.location.toString().toLowerCase().indexOf("/next/") < 0) {
+            hideAdOverlay();
+        } else {
+            $("#overlay-ad").removeClass("hide").addClass("show");
+        }
+
         // show all of the game elements
         showGameElements();
 
@@ -1320,17 +1334,39 @@ $(document).ready(function(){
             setNextRoundLink()
         }
 
-        function bindPageEvents() {
+        function bindPageEventsAfterLoad() {
 
             $(".close-ad").on("click", function(elem) {
                 elem.preventDefault();
                 hideAdOverlay();
-
-                if (parseInt(settings.getProperty("showAds")) == 1) {
-                    // pre-load next ad
-                    loadAdOverlay();
-                }
             });
+
+            switch (parseInt(settings.getProperty("showAds"))) {
+                case 1: // pre-load ads
+                    $(".next-round-link").on("click", function (elem) {
+                        elem.preventDefault();
+                        showAdOverlay();
+                        startRound();
+                    });
+                    break;
+                case 2: // use Next Round link
+                    // remove onbeforeunload event so we can go to "next" page
+                    $(".next-round-link").on("click", function (elem) {
+                        window.onbeforeunload = function () {
+                        };
+                    });
+                    break;
+                case 0: // no ads - don't show ads (ie. don't load next page)
+                default:
+                    $(".next-round-link").on("click", function (elem) {
+                        elem.preventDefault();
+                        startRound();
+                    });
+                    break;
+            }
+        }
+
+        function bindPageEventsBeforeLoad() {
 
             $("#btn-topic-feedback-cancel").on("click", function(elem) {
                 elem.preventDefault();
@@ -1621,7 +1657,7 @@ $(document).ready(function(){
         function createCategorySelectList() {
             overlayButton("Loading Categories ...", {type: "loading", class: "loading-msg", clickable: false, timeout: 0});
 
-            var url = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/category/get?callback=?"
+            var categoryUrl = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/category/get?callback=?"
                 + "&rn=1"
                 + "&mx=3"
                 + "&gi=" + play.id
@@ -1629,19 +1665,19 @@ $(document).ready(function(){
                 + "&sl=" + play.adjustedSkillLevel()
                 + "&kl=" + play.adjustedKnowledgeLevel();
 
-            settings.ga("API", settings.getApiDomain(), url);
-            play.ga(play.id+": "+play.name, "fetch-categories", "url: "+url);
+            settings.ga("API", settings.getApiDomain(), categoryUrl);
+            play.ga(play.id+": "+play.name, "fetch-categories", "url: "+categoryUrl);
 
             // add random integer to break browser cache
-            url += "&" + Math.floor((Math.random() * 100000000) + 1);
+            categoryUrl += "&" + Math.floor((Math.random() * 100000000) + 1);
 
             $.ajax({
                 type: 'GET',
-                url: url,
+                url: categoryUrl,
                 async: false,
-                jsonpCallback: 'jsonCallback',
+                jsonpCallback: "jsonCallback1",
                 contentType: "application/json",
-                dataType: 'jsonp',
+                dataType: "jsonp",
                 success: function(categories) {
                     console.log(categories);
 
@@ -1662,8 +1698,8 @@ $(document).ready(function(){
                     processOverlayButton();
                 },
                 error: function(e) {
-                    console.log("Get Error 1000: url: "+url);
-                    settings.ga("Error", "createCategorySelectList", "url: "+url);
+                    try {settings.ga("Error", "createCategorySelectList", "url: "+categoryUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error createCategorySelectList:\nurl: "+categoryUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                     if (confirm("Could not fetch categories. Try again?")) {
                         settings.nextApiDomain();
                         createCategorySelectList();
@@ -1675,7 +1711,7 @@ $(document).ready(function(){
         function createLessonSelectList() {
             overlayButton("Loading Lessons ...", {type: "loading", class: "loading-msg", clickable: false, timeout: 0});
 
-            var url = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/lesson/get?callback=?"
+            var lessonUrl = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/lesson/get?callback=?"
                 + "&rn=1"
                 + "&mx=3"
                 + "&gi=" + play.id
@@ -1683,19 +1719,19 @@ $(document).ready(function(){
                 + "&sl=" + play.adjustedSkillLevel()
                 + "&kl=" + play.adjustedKnowledgeLevel();
 
-            settings.ga("API", settings.getApiDomain(), url);
-            play.ga(play.id+": "+play.name, "fetch-lessons", "url: "+url);
+            settings.ga("API", settings.getApiDomain(), lessonUrl);
+            play.ga(play.id+": "+play.name, "fetch-lessons", "url: "+lessonUrl);
 
             // add random integer to break browser cache
-            url += "&" + Math.floor((Math.random() * 100000000) + 1);
+            lessonUrl += "&" + Math.floor((Math.random() * 100000000) + 1);
 
             $.ajax({
-                type: 'GET',
-                url: url,
+                type: "GET",
+                url: lessonUrl,
                 async: false,
-                jsonpCallback: 'jsonCallback',
+                jsonpCallback: "jsonCallback2",
                 contentType: "application/json",
-                dataType: 'jsonp',
+                dataType: "jsonp",
                 success: function(lessons) {
                     console.log(lessons);
 
@@ -1716,8 +1752,8 @@ $(document).ready(function(){
                     processOverlayButton();
                 },
                 error: function(e) {
-                    console.log("Get Error 1001: url: "+url);
-                    settings.ga("Error", "createLessonSelectList", "url: "+url);
+                    try {settings.ga("Error", "createLessonSelectList", "url: "+lessonUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error createLessonSelectList:\nurl: "+lessonUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                     if (confirm("Could not fetch lessons. Try again?")) {
                         settings.nextApiDomain();
                         createLessonSelectList();
@@ -1729,7 +1765,7 @@ $(document).ready(function(){
         function createSubjectSelectList() {
             overlayButton("Loading Subjects ...", {type: "loading", class: "loading-msg", clickable: false, timeout: 0});
 
-            var url = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/subject/get?callback=?"
+            var subjectUrl = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/subject/get?callback=?"
                 + "rn=1"
                 + "&mx=3"
                 + "&gi=" + play.id
@@ -1738,25 +1774,25 @@ $(document).ready(function(){
                 + "&kl=" + play.adjustedKnowledgeLevel()
                 + '&ci=' + ((play.category.choose === 0) ? 0 : play.category.id);
 
-            settings.ga("API", settings.getApiDomain(), url);
-            play.ga(play.id+": "+play.name, "fetch-subjects", "url: "+url);
+            settings.ga("API", settings.getApiDomain(), subjectUrl);
+            play.ga(play.id+": "+play.name, "fetch-subjects", "url: "+subjectUrl);
 
             // add random integer to break browser cache
-            url += "?" + Math.floor((Math.random() * 100000000) + 1);
+            subjectUrl += "?" + Math.floor((Math.random() * 100000000) + 1);
 
             $.ajax({
-                type: 'GET',
-                url: url,
+                type: "GET",
+                url: subjectUrl,
                 async: false,
-                jsonpCallback: 'jsonCallback',
+                jsonpCallback: "jsonCallback3",
                 contentType: "application/json",
-                dataType: 'jsonp',
+                dataType: "jsonp",
                 success: function(subjects) {
                     console.log(subjects);
 
                     if ($.isEmptyObject(subjects) && (play.category.choose > 0)) {
 
-                        play.ga("Warning", "no-subjects-found-for-category", "url: "+url);
+                        play.ga("Warning", "no-subjects-found-for-category", "url: "+subjectUrl);
                         alert("No subjects found.\n\nPlease select another category.");
                         createCategorySelectList();
 
@@ -1788,8 +1824,8 @@ $(document).ready(function(){
                     }
                 },
                 error: function(e) {
-                    console.log("Get Error 1002: url: "+url);
-                    settings.ga("Error", "createSubjectSelectList", "url: "+url);
+                    try {settings.ga("Error", "createSubjectSelectList", "url: "+subjectUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error createSubjectSelectList:\nurl: "+subjectUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                     if (confirm("Could not fetch subjects. Try again?")) {
                         settings.nextApiDomain();
                         createSubjectSelectList();
@@ -1801,7 +1837,7 @@ $(document).ready(function(){
         function createTopicSelectList() {
             overlayButton("Loading Topics ...", {type: "loading", class: "loading-msg", clickable: false, timeout: 0});
 
-            var url = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/topic/get?callback=?"
+            var topicUrl = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/topic/get?callback=?"
                 + "&rn=1"
                 + "&mx=3"
                 + "&gi=" + play.id
@@ -1811,31 +1847,31 @@ $(document).ready(function(){
                 + "&ci=" + ((play.category.choose === 0) ? 0 : play.category.id)
                 + "&ui=" + ((play.subject.choose === 0) ? 0 : play.subject.id);
 
-            settings.ga("API", settings.getApiDomain(), url);
-            play.ga(play.id+": "+play.name, "fetch-topics", "url: "+url);
+            settings.ga("API", settings.getApiDomain(), topicUrl);
+            play.ga(play.id+": "+play.name, "fetch-topics", "url: "+topicUrl);
 
             // add random integer to break browser cache
-            url += "&" + Math.floor((Math.random() * 100000000) + 1);
+            topicUrl += "&" + Math.floor((Math.random() * 100000000) + 1);
 
             $.ajax({
-                type: 'GET',
-                url: url,
+                type: "GET",
+                url: topicUrl,
                 async: false,
-                jsonpCallback: 'jsonCallback',
+                jsonpCallback: "jsonCallback4",
                 contentType: "application/json",
-                dataType: 'jsonp',
+                dataType: "jsonp",
                 success: function(topics) {
                     console.log(topics);
 
                     if ($.isEmptyObject(topics) && (play.subject.choose > 0)) {
 
-                        play.ga("Warning", "no-topic-found-for-subject", "url: "+url);
+                        play.ga("Warning", "no-topic-found-for-subject", "url: "+topicUrl);
                         alert("No topics found.\n\nPlease select another subject.");
                         createSubjectSelectList();
 
                     } else if ($.isEmptyObject(topics) && (play.subject.choose > 0)) {
 
-                        play.ga("Warning", "no-topic-found-for-category", "url: "+url);
+                        play.ga("Warning", "no-topic-found-for-category", "url: "+topicUrl);
                         alert("No topics found.\n\nPlease select another category.");
                         createCategorySelectList();
 
@@ -1866,8 +1902,8 @@ $(document).ready(function(){
                     }
                 },
                 error: function(e) {
-                    console.log("Get Error 1003: url: "+url);
-                    settings.ga("Error", "createTopicSelectList", "url: "+url);
+                    try {settings.ga("Error", "createTopicSelectList", "url: "+topicUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error createTopicSelectList:\nurl: "+topicUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                     if (confirm("Could not fetch topics. Try again?")) {
                         settings.nextApiDomain();
                         createTopicSelectList();
@@ -1902,7 +1938,7 @@ $(document).ready(function(){
 
             overlayButton("Loading Thwords ...", {type: "loading", class: "loading-msg", clickable: false, timeout: 0});
 
-            var url = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/game-play/get?callback=?"
+            var playUrl = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/game-play/get?callback=?"
                 + "&gi=" + play.id
                 + "&sl=" + play.skillLevel
                 + "&kl=" + play.knowledgeLevel
@@ -1912,27 +1948,27 @@ $(document).ready(function(){
                 + "&li=" + ((play.getProperty("lesson-choose") < 0) ?  play.getProperty("lesson-id") : (options.lesson_id || 0))
                 + "&al=" + play.lang;
 
-            settings.ga("API", settings.getApiDomain(), url);
-            play.ga(play.id+": "+play.name, "fetch-play", "url: "+url);
+            settings.ga("API", settings.getApiDomain(), playUrl);
+            play.ga(play.id+": "+play.name, "fetch-play", "url: "+playUrl);
 
             // add random integer to break browser cache
-            url += "&" + Math.floor((Math.random() * 100000000) + 1);
+            playUrl += "&" + Math.floor((Math.random() * 100000000) + 1);
 
             $.ajax({
-                type: 'GET',
-                url: url,
+                type: "GET",
+                url: playUrl,
                 async: false,
-                jsonpCallback: 'jsonCallback',
+                jsonpCallback: "jsonCallback5",
                 contentType: "application/json",
-                dataType: 'jsonp',
+                dataType: "jsonp",
                 success: function(playData) {
                     overlayButton("Creating Tiles ...", {type: "loading", class: "loading-msg", clickable: false, timeout: 0});
                     loadPlay(playData);
                     processOverlayButton();
                 },
                 error: function(e) {
-                    console.log("Get Error 1004: url: "+url);
-                    settings.ga("Error", "fetchPlay", "url: "+url);
+                    try {settings.ga("Error", "fetchPlay", "url: "+playUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error fetchPlay:\nurl: "+playUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                     if (confirm("Could not fetch Thwords. Try again?")) {
                         settings.nextApiDomain();
                         fetchPlay(options);
@@ -2197,8 +2233,8 @@ $(document).ready(function(){
             }
 
             // strip parameters and hash off of the current url
-            var url = document.location.toString().split(/[?#]/)[0];
-            url = url.replace("/next/", "/play/");  // always use the "play" url instead of the "next" url
+            var shareUrl = document.location.toString().split(/[?#]/)[0];
+            shareUrl = shareUrl.replace("/next/", "/play/");  // always use the "play" url instead of the "next" url
 
             if (!$.isEmptyObject(params)) {
 
@@ -2208,11 +2244,11 @@ $(document).ready(function(){
                 });
 
                 if (paramStr.length > 0) {
-                    url += ((url.indexOf("?") < 0) ? "?" : "&") + paramStr.substr(1);
+                    shareUrl += ((shareUrl.indexOf("?") < 0) ? "?" : "&") + paramStr.substr(1);
                 }
             }
 
-            return url;
+            return shareUrl;
         }
 
         function getSkillLevelAbbrev(value) {
@@ -2283,6 +2319,9 @@ $(document).ready(function(){
 
         function hideAdOverlay() {
             $("#overlay-ad").removeClass("show").addClass("hide");
+
+            // pre-load next ad
+            loadAdOverlay();
         }
 
         function hideGamePanel(name) {
@@ -2290,29 +2329,38 @@ $(document).ready(function(){
         }
 
         function loadAdOverlay() {
-            var url = "/ad";
+
+            if (parseInt(settings.getProperty("showAds")) !== 1) {
+                // ads are only preloaded for 1
+                return false;
+            }
+
+            var adUrl = settings.getProperty("adUrl")+"?callback=?";
+
+            // add random integer to break browser cache
+            adUrl += "&" + Math.floor((Math.random() * 100000000) + 1);
 
             $.ajax({
-                type: 'GET',
-                url: url,
+                type: "GET",
+                url: adUrl,
                 async: false,
-                contentType: "text/html",
+                jsonpCallback: "jsonCallback6",
+                contentType: "application/json",
+                dataType: "jsonp",
                 data: {},
-                success: function(adHtml) {
-                    $("#ad-content").html(adHtml);
-                    try {
-                        if (!$("#ad-overlay-iframe").length) {
-                            settings.ga("Ad", "load-error", "No ad-overlay-iframe found.");
-                        } else if (!$("#ad-overlay-iframe").attr("src").length) {
-                            settings.ga("Ad", "load-error", "No ad-overlay-iframe src attribute found.");
-                        } else {
-                            settings.ga("Ad", "load", $("#ad-overlay-iframe").attr("src"));
-                        }
-                    } catch (e) {}
+                success: function(data) {
+                    $("#ad-content").html(data);
+                    $("#ad-content").find('a').each(function() {
+                        $(this).on("click", function(event) {
+                            settings.ga("Ad", "click", $(this).data("client") + ": " + $(this).attr("href"));
+                            hideAdOverlay();
+                            return true;
+                        });
+                    });
                 },
                 error: function(e) {
-                    try {settings.ga("Error", "load-ad", "url: "+url)} catch (e) {};
-                    console.log("Load Ad Error:");
+                    try {settings.ga("Error", "loadAdOverlay", "url: "+adUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error loadAdOverlay:\nurl: "+adUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                 }
             });
         }
@@ -2550,7 +2598,7 @@ $(document).ready(function(){
                             bonusQuestion.prefix = "";
                         } else {
                             var prefix = bonusQuestion.answer.slice(0, pos + 1);
-                            if ((play.thwords.cs.p.indexOf(prefix) > -1) && (play.adjustedSkillLevel() < 3)) {
+                            if ((play.thwords.px.indexOf(prefix) > -1) && (play.adjustedSkillLevel() < 3)) {
                                 // only separate out prefix out for novice and amateur
                                 bonusQuestion.prefix = prefix;
                                 bonusQuestion.answer = bonusQuestion.answer.slice(pos + 1);
@@ -2987,7 +3035,7 @@ $(document).ready(function(){
                 strike();
 
                 // subtract from 1 to 10 points (inverse or char point value)
-                var valLost = play.thwords.chs[idx].v - 11;
+                var valLost = wrongValue(play.thwords.chs[idx].v);
                 addPoints(valLost);
             }
 
@@ -3158,24 +3206,24 @@ $(document).ready(function(){
                 try {play.ga(play.id+": "+play.name, "record-stats", "data: "+JSON.stringify(postData))} catch (e) {};
 
                 statsDomain = settings.getStatsDomain();
-                var url = "http://" + statsDomain + apiRoot.replace(/\/$/, '') + "/results/save?callback=?";
+                var finalStatsUrl = "http://" + statsDomain + apiRoot.replace(/\/$/, '') + "/results/save?callback=?";
 
-                settings.ga("API", statsDomain, url);
+                settings.ga("API", statsDomain, finalStatsUrl);
 
                 $.ajax({
-                    type: 'POST',
-                    url: url,
+                    type: "POST",
+                    url: finalStatsUrl,
                     async: false,
-                    jsonpCallback: 'jsonCallback',
+                    jsonpCallback: "jsonCallback7",
                     contentType: "application/json",
-                    dataType: 'jsonp',
+                    dataType: "jsonp",
                     data: postData,
                     success: function(categories) {
                         console.log("Game successfully recorded.");
                     },
                     error: function(e) {
-                        try {play.ga("Error", "record-stats", "data: "+JSON.stringify(postData))} catch (e) {};
-                        console.log("Record Stats Error:");
+                        try {settings.ga("Error", "recordFinalStats", "url: "+finalStatsUrl+", "+JSON.stringify(e)+", data: "+JSON.stringify(postData))} catch (e) {};
+                        try {console.log("Error recordFinalStats:\ndata: "+JSON.stringify(postData)+"\nurl: "+finalStatsUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                     }
                 });
 
@@ -3446,29 +3494,16 @@ $(document).ready(function(){
         }
 
         function renderTileValuesHtml() {
-
             var data = {
-                tiles: [],
-                prematureMsgClass: "hide"
+                options: []
             };
-            if (typeof play.thwords.chs !== "undefined") {
-                // get each tile value
-                $.each(play.thwords.chs, function(idx, char) {
 
-                    var label = char.l;
-                    if (!$.isEmptyObject(play.thwords.cs.eq[char.l]) && (play.thwords.cs.eq[char.l].length > 0)) {
-                        label += " (" + play.thwords.cs.eq[char.l].join(", ") + ")";
-                    }
-
-                    data.tiles[data.tiles.length] = {
-                        label: label,
-                        right: char.v,
-                        wrong: 11 - char.v
-                    }
-                });
-            } else {
-                data.prematureMsgClass = "show";
-            }
+            $.each(languages, function(name, value) {
+                data.options[data.options.length] = {
+                    name: name,
+                    value: value
+                };
+            });
 
             return Mustache.render(tileValuesTemplate, data);
         }
@@ -3539,9 +3574,9 @@ $(document).ready(function(){
                             });
 
                     } else {
-                        var valLost = Math.abs(val - 11);
+                        var valLost = Math.abs(wrongValue(val));
                         var msg = "Strike!"
-                        msg += "<br>You lose " + valLost + ((valLost==1) ? " point" : " points.");
+                        msg += "<br>You lose " + valLost + ((valLost == 1) ? " point" : " points.");
 
                         overlayButton(msg,
                             {
@@ -3591,39 +3626,14 @@ $(document).ready(function(){
 
         function setNextRoundLink() {
 
-            var url = document.location.toString().split(/[?#]/)[0];
-            if (url.slice(-1) === "/") {
+            var nextRoundUrl = document.location.toString().split(/[?#]/)[0];
+            if (nextRoundUrl.slice(-1) === "/") {
                 // remove trailing backslash
-                url = url.substring(0, url.length - 1);
+                nextRoundUrl = nextRoundUrl.substring(0, nextRoundUrl.length - 1);
             }
 
             // add random integer to break browser cache
-            $(".next-round-link").attr("href", url.toString().replace("/play/", "/next/")+"?" + Math.floor((Math.random() * 100000000) + 1));
-
-            switch (parseInt(settings.getProperty("showAds"))) {
-                case 1: // pre-load ads
-                    hideAdOverlay();
-                    loadAdOverlay();
-                    $(".next-round-link").on("click", function (elem) {
-                        elem.preventDefault();
-                        showAdOverlay();
-                        startRound();
-                    });
-                    break;
-                case 2: // use Next Round link
-                    // remove onbeforeunload event so we can go to "next" page
-                    $(".next-round-link").on("click", function(elem) {
-                        window.onbeforeunload = function() {};
-                    });
-                    break;
-                case 0: // no ads - don't show ads (ie. don't load next page)
-                default:
-                    $(".next-round-link").on("click", function (elem) {
-                        elem.preventDefault();
-                        startRound();
-                    });
-                    break;
-            }
+            $(".next-round-link").attr("href", nextRoundUrl.toString().replace("/play/", "/next/")+"?" + Math.floor((Math.random() * 100000000) + 1));
         }
 
         function setPlay() {
@@ -3668,14 +3678,17 @@ $(document).ready(function(){
 
         function showAdOverlay() {
             try {
-                if (!$("#ad-overlay-iframe").length) {
-                    settings.ga("Ad", "show-error", "No ad-overlay-iframe found.");
-                } else if (!$("#ad-overlay-iframe").attr("src").length) {
-                    settings.ga("Ad", "show-error", "No ad-overlay-iframe src attribute found.");
-                } else {
-                    settings.ga("Ad", "show", $("#ad-overlay-iframe").attr("src"));
+                if ($("#ad-content").length) {
+                    // pre-loaded ad
+                    if (!$("#ad-content").html().replace(/^\s+|\s+$/gm,'').length) {
+                        // ad content is empty so load an ad
+                        loadAdOverlay();
+                    }
                 }
-            } catch (e) {}
+            } catch (e) {
+                try {settings.ga("Error", "showAdOverlay", JSON.stringify(e))} catch (e) {};
+                try {console.log("Error showAdOverlay: "+JSON.stringify(e))} catch (e) {};
+            }
             $("#overlay-ad").removeClass("hide").addClass("show");
         }
 
@@ -3789,23 +3802,23 @@ $(document).ready(function(){
 
             paramStr.replace(/^&/, '');
 
-            // get url
+            // get high score url
             var statsDomain = settings.getStatsDomain();
-            var url = "http://" + statsDomain + apiRoot.replace(/\/$/, '') + "/high-scores/get?callback=?" + paramStr;
+            var highScoreUrl = "http://" + statsDomain + apiRoot.replace(/\/$/, '') + "/high-scores/get?callback=?" + paramStr;
 
-            settings.ga("API", statsDomain, url);
-            play.ga(play.id+": "+play.name, "high-scores-get", "url: "+url);
+            settings.ga("API", statsDomain, highScoreUrl);
+            play.ga(play.id+": "+play.name, "high-scores-get", "url: "+highScoreUrl);
 
             // add random integer to break browser cache
-            url += "&" + Math.floor((Math.random() * 100000000) + 1);
+            highScoreUrl += "&" + Math.floor((Math.random() * 100000000) + 1);
 
             $.ajax({
-                type: 'GET',
-                url: url,
+                type: "GET",
+                url: highScoreUrl,
                 async: false,
-                jsonpCallback: 'jsonCallback',
+                jsonpCallback: "jsonCallback8",
                 contentType: "application/json",
-                dataType: 'jsonp',
+                dataType: "jsonp",
                 success: function(data) {
                     if ($.isEmptyObject(data)) {
                         var html = "<h2>No scores found.</h2>";
@@ -3861,8 +3874,8 @@ $(document).ready(function(){
                     });
                 },
                 error: function(e) {
-                    console.log("Get Error 1005: url: "+url);
-                    settings.ga("Error", "fetchHighScores", "url: "+url);
+                    try {settings.ga("Error", "fetchHighScores", "url: "+highScoreUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error fetchHighScores:\nurl: "+highScoreUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
                     overlayDiv("<p>There was a problem retrieving the high scores.</p><p>Try again later</p>", {type: "standard"});
                 }
             });
@@ -4069,7 +4082,66 @@ $(document).ready(function(){
 
             closeMenu();
 
+            // render tile values overlay
             overlayDiv(renderTileValuesHtml(), {type: "standard"});
+
+            // set current language in lang select list
+            $("#tile-values-lang").val((typeof play !== "undefined") ? play.getProperty("lang") : defaultLang)
+
+            // bind click event to language select list
+            $("#tile-values-lang").on("change", function() {
+                loadTileValuesTable($(this).val())
+            });
+
+            loadTileValuesTable((typeof play !== "undefined") ? play.getProperty("lang") : defaultLang)
+        }
+
+        function loadTileValuesTable(lang) {
+
+            // display loading ...
+            $("#tile-value-table-container").html(Mustache.render(loadingTemplate, {}));
+
+            // fetch the tile values
+            var tilesUrl = "http://" + settings.getApiDomain() + apiRoot.replace(/\/$/, '') + "/tiles/get?"
+                + "&al=" + lang;
+
+            settings.ga("API", settings.getApiDomain(), tilesUrl);
+
+            $.ajax({
+                type: "GET",
+                url: tilesUrl,
+                async: false,
+                jsonpCallback: "jsonCallback9",
+                contentType: "application/json",
+                dataType: "jsonp",
+                success: function(tileData) {
+                    console.log(tileData);
+
+                    // append the tile values to the display
+                    var data = {
+                        tiles: []
+                    };
+
+                    $.each(tileData.values, function(name, value) {
+                        data.tiles[data.tiles.length] = {
+                            label: name === " " ? "<i>blank</i>" : name.toLowerCase(),
+                            right: value,
+                            wrong: wrongValue(value)
+                        };
+                    });
+
+                    $("#tile-value-table-container").html(Mustache.render(tileValuesTableTemplate, data));
+
+                },
+                error: function(e) {
+                    try {settings.ga("Error", "loadTileValuesTable", "url: "+tilesUrl+", "+JSON.stringify(e))} catch (e) {};
+                    try {console.log("Error loadTileValuesTable:\nurl: "+tilesUrl+"\nerror: "+JSON.stringify(e))} catch (e) {};
+                    if (confirm("Could not fetch tile values. Try again?")) {
+                        settings.nextApiDomain();
+                        showTileValuesOverlay();
+                    }
+                }
+            });
         }
 
         function shuffle(o){
@@ -4415,6 +4487,9 @@ $(document).ready(function(){
             }
         }
 
+        function wrongValue(rightValue) {
+            return parseInt(rightValue) - 11;
+        }
 
         /** *********************************************************************************************************
          *  The following are for debugging.

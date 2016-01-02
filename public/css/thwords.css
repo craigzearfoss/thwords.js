@@ -2631,8 +2631,10 @@ so that the content is unclickable while menu is shown
     padding: 0;
     text-align: center;
     top: 36px;
-    background-color: #ffffff;
     z-index: 300;
+}
+#overlay-ad > #ad-content > a, #overlay-ad > #ad-content > a > img {
+    width: 100%;
 }
 #ad-header {
     display: block;
